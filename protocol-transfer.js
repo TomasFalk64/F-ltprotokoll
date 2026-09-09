@@ -19,7 +19,7 @@ function protocolSignature(snapshot = protocolData()) {
 }
 function hasUnsavedWork() {
   const snapshot = protocolData();
-  if (pendingImages) return true;
+  if (pendingImages || pendingSpatialFiles) return true;
   if (lastSavedSignature !== null) return protocolSignature(snapshot) !== lastSavedSignature;
   return snapshot.fields.some(([, value]) => value.trim()) || Object.keys(snapshot.images).length > 0;
 }
@@ -32,6 +32,8 @@ function validateProtocol(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value) || value.format !== PROTOCOL_FORMAT) fail('Filen är inte ett Fältprotokoll. Välj JSON-filen som skapades med Spara.');
   if (value.version !== PROTOCOL_VERSION) fail('Protokollets version stöds inte av denna version av formuläret.');
   if (!Array.isArray(value.fields) || value.fields.length > 500) fail('Filen innehåller ogiltiga fält.');
+  if (!value.fields.every(entry => Array.isArray(entry) && entry.length === 2 && entry.every(item => typeof item === 'string'))) fail('Filen innehåller ogiltiga fältvärden.');
+  value = {...value, fields:normalizeFields(value.fields)};
   const controls = [...form.querySelectorAll('[name]')];
   const seen = new Map();
   for (const entry of value.fields) {
@@ -89,13 +91,14 @@ function applyProtocol(snapshot) {
   images = {...snapshot.images};
   showImages();
   saveDraft();
+  markPolygonImported();
   lastSavedSignature = protocolSignature();
-  status.textContent = 'Protokollet har importerats. Du kan nu komplettera uppgifter och bilder.';
+  setStatus('Protokollet har importerats. Du kan nu komplettera uppgifter och bilder.');
 }
 
 async function saveAll() {
   if (exportInProgress || !form.reportValidity()) return;
-  if (pendingImages) { status.textContent = 'Vänta tills bilderna har lästs in och spara sedan igen.'; return; }
+  if (pendingImages || pendingSpatialFiles) { setStatus('Vänta tills bilder och polygon har lästs in och spara sedan igen.'); return; }
   const snapshot = protocolData();
   const signature = protocolSignature(snapshot);
   const base = `faltrapport-${(snapshot.fields.find(([name]) => name === 'delomradeId')?.[1] || 'utkast').trim().replace(/[<>:"/\\|?*\x00-\x1f]/g, '-').slice(0, 80) || 'utkast'}`;
@@ -103,7 +106,7 @@ async function saveAll() {
   const button = document.querySelector('#saveButton');
   button.disabled = true;
   button.textContent = 'Sparar…';
-  status.textContent = 'Skapar JSON, Word och HTML…';
+  setStatus('Skapar JSON, Word och HTML…');
   try {
     validateProtocol(snapshot);
     const json = JSON.stringify({...snapshot, savedAt:new Date().toISOString()}, null, 2);
@@ -131,9 +134,9 @@ async function saveAll() {
     for (const link of links.children) link.click();
     setTimeout(() => previousUrls.forEach(url => URL.revokeObjectURL(url)), 30000);
     lastSavedSignature = signature;
-    status.textContent = 'Tre filer har skickats till nedladdningar. Om någon saknas, använd de separata länkarna ovan. JSON-filen används vid import.';
+    setStatus('Tre filer har skickats till nedladdningar. Om någon saknas, använd de separata länkarna ovan. JSON-filen används vid import.');
   } catch (error) {
-    status.textContent = `Kunde inte skapa alla rapportfiler. ${error.message} Dina uppgifter finns kvar i formuläret.`;
+    setStatus(`Kunde inte skapa alla rapportfiler. ${error.message} Dina uppgifter finns kvar i formuläret.`);
   } finally {
     exportInProgress = false;
     button.disabled = false;
@@ -154,17 +157,17 @@ importInput.addEventListener('change', async () => {
   importInProgress = true;
   const button = document.querySelector('#importButton');
   button.disabled = true;
-  status.textContent = 'Kontrollerar protokollfilen…';
+  setStatus('Kontrollerar protokollfilen…');
   try {
     const snapshot = await readProtocolFile(file);
     // Reconfirm if the user edited while file reading/image decoding was pending.
     if (protocolSignature() !== importApprovalSignature && !confirmImport()) {
-      status.textContent = 'Importen avbröts. Dina uppgifter finns kvar.';
+      setStatus('Importen avbröts. Dina uppgifter finns kvar.');
       return;
     }
     applyProtocol(snapshot);
   } catch (error) {
-    status.textContent = `Importen avbröts: ${error.message}`;
+    setStatus(`Importen avbröts: ${error.message}`);
   } finally {
     importInProgress = false;
     button.disabled = false;

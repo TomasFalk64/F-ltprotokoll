@@ -19,8 +19,15 @@ select{width:100%;margin-top:7px;padding:6px 10px;border:1px solid var(--line);b
 .storage-status{font-size:13px;color:var(--moss)}.image-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .saved-files{margin:18px 0;padding:18px;border:1px solid var(--line);border-radius:8px;background:var(--white)}
 .saved-files[hidden]{display:none}.saved-files p{font-size:12px;color:var(--muted)}.saved-files .export-actions{flex-wrap:wrap}.saved-files a{text-decoration:none}
+.map-upload .upload-card{margin-top:14px;width:450px;max-width:100%;height:260px;min-height:260px}.map-upload .upload-card img{object-fit:contain;background:#fff}.map-upload .remove-image{width:auto}.polygon-upload{margin-top:12px}.polygon-upload input{padding:6px}textarea[name="polygonGeojson"]{font-family:monospace;font-size:12px}
 .upload-card input,.upload-card.has-image input{display:block;position:absolute;inset:0;width:100%;height:100%;opacity:0;z-index:2;cursor:pointer;margin:0}
 .upload-card:focus-within{outline:3px solid var(--moss);outline-offset:3px}
+.map-upload>div{width:450px;max-width:100%;margin-inline:auto}.map-upload h3[title]{cursor:help}
+.upload-card.has-image:after{content:none}
+.location-fields{margin-top:0}.location-fields label[title]{cursor:help}.polygon-controls{display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap}.polygon-controls input[name="polygonGeojson"]{width:240px;max-width:100%;margin-top:0}.polygon-controls .button{white-space:nowrap}#polygonFile{display:none}.center-label{margin-top:18px}#centerCoordinate{width:260px;max-width:100%}
+#polygonGeojson{width:240px;max-width:100%;margin-top:0;resize:none;white-space:pre;overflow:hidden;scrollbar-width:none}.polygon-import-status{font-size:12px;color:var(--moss);white-space:nowrap}
+#polygonGeojson::-webkit-scrollbar{display:none}
+.remove-polygon{width:28px;height:28px;padding:0;border:1px solid #e7b4b4;border-radius:5px;background:#fff;color:#b42318;font:22px/1 Arial,sans-serif;cursor:pointer;flex:none}.remove-polygon:hover{background:#fff0f0}.remove-polygon:focus-visible{outline:3px solid var(--sun);outline-offset:2px}.remove-polygon[hidden]{display:none}
 .button:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:3px}.button:disabled{opacity:.5;cursor:default}.remove-image{width:100%}
 @media(max-width:700px){.topbar{height:auto;min-height:72px;gap:10px;flex-wrap:wrap;padding-block:12px}.top-actions .button-quiet{display:block}.image-grid{grid-template-columns:1fr}.score-row{grid-template-columns:minmax(0,1fr) 135px;gap:8px;padding:8px}.completion small{display:inline-block}}
 @media(max-width:700px){.topbar-area{order:3;flex-basis:100%;text-align:left}.topbar-area:empty{display:none}.choice-grid.three,.choice-grid.four{grid-template-columns:1fr}}

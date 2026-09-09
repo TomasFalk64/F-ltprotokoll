@@ -1,9 +1,9 @@
 // Shared report content keeps HTML and Word exports in sync.
 function reportContent(snapshot) {
   const value = name => snapshot.fields.find(([key]) => key === name)?.[1] || '';
-  const checks = name => [snapshot.fields.filter(([key]) => key === name).map(([, text]) => text).join(', '), value(`${name}Detalj`)].filter(Boolean).join(' – ');
+  const checks = name => [snapshot.fields.filter(([key]) => key === name).map(([, text]) => text).join(', '), name !== 'strukturer' && value(`${name}Detalj`)].filter(Boolean).join(' – ');
   const field = (label, text) => [label, text || 'Ej angivet'];
-  const basic = [['Delområde-ID','delomradeId'],['Namn på delområde','namn'],['Kommun / Ort','kommun'],['Fastighetsbeteckning','fastighet'],['Areal (ha)','areal'],['Inventeringsdatum','datum'],['Inventerare','inventerare']];
+  const basic = [['Delområde-ID','delomradeId'],['Namn på delområde','namn'],['Kommun / Ort','kommun'],['Fastighetsbeteckning','fastighet'],['Areal (ha)','areal'],['Inventeringsdatum','datum'],['Polygon (JSON/GeoJSON)','polygonGeojson'],['Mittpunktskoordinat','centerCoordinate'],['Inventerare','inventerare']];
   const groups = pairs => pairs.map(([label, name]) => field(label, checks(name)));
   return {
     title: value('namn') || 'Områdesbeskrivning',
@@ -13,12 +13,13 @@ function reportContent(snapshot) {
     scale: 'Förekomstskala: 0 = saknas, 1 = enstaka, 2 = sparsamt, 3 = måttligt, 4 = rikligt. Tomma fält betyder ej angivet/ej bedömt.',
     sections: [
       ['Grunduppgifter', [...basic.map(([label, name]) => field(label, value(name))), ...groups([['Inventeringsmetod','metod'],['Inventeringens täckning','tackning'],['Begränsningar','begransning']])]],
-      ['Trädskikt och skogstyp', [...groups([['Skogstyp','skogstyp'],['Trädslag','tradslag'],['Särskilda skogstyper','sarskildSkog'],['Åldersstruktur','aldersstruktur'],['Skiktning','skiktning']]), field('Ålder & diameter', value('alderDiameter')), field('Dominerande ålder (år)', value('dominerandeAlder')), ...groups([['Beståndsstruktur','bestandsstruktur']])]],
+      ['Trädskikt och skogstyp', [...groups([['Skogstyp','skogstyp'],['Trädslag','tradslag'],['Särskilda skogstyper','sarskildSkog'],['Åldersstruktur','aldersstruktur'],['Skiktning','skiktning']]), field('Kommentar trädskikt', value('alderDiameter')), field('Dominerande ålder (år)', value('dominerandeAlder')), ...groups([['Beståndsstruktur','bestandsstruktur']])]],
       ['Naturvärdesträd', nvt.map((label, i) => field(label, value(`nvt${i}`)))],
-      ['Terräng & markförhållanden', groups(markGroups)],
-      ['Markvegetation', groups([['Vegetationstyp','vegetation'],['Särskilda strukturer','strukturer']])],
-      ['Död ved', deadwood.map((label, i) => field(label, [value(`ved${i}tradslag`) && `Trädslag: ${value(`ved${i}tradslag`)}`, value(`ved${i}forekomst`) && `Förekomst: ${value(`ved${i}forekomst`)}`, value(`ved${i}grovlek`), value(`ved${i}klimat`), value(`ved${i}detalj`)].filter(Boolean).join(' · ')))],
-      ['Processer & påverkan', [...groups([['Naturprocesser','processer'],['Mänsklig påverkan','paaverkan']]), field('Naturvårdsarter', value('naturvardsarter'))]],
+      ['Terräng & markförhållanden', [...groups(markGroups), field('Kommentar terräng', value('terrangKommentar'))]],
+      ['Markvegetation', [...groups([['Vegetationstyp','vegetation'],['Särskilda strukturer','strukturer']]), field('Kommentar markvegetation', value('strukturerDetalj'))]],
+      ['Död ved', deadwood.map((label, i) => field(label, [value(`ved${i}tradslag`) && `Trädslag: ${value(`ved${i}tradslag`)}`, value(`ved${i}forekomst`) && `Förekomst: ${value(`ved${i}forekomst`)}`, value(`ved${i}grovlek`), value(`ved${i}klimat`), value(`ved${i}detalj`) && `Död ved kommentar: ${value(`ved${i}detalj`)}`].filter(Boolean).join(' · ')))],
+      ['Processer & påverkan', groups([['Naturprocesser','processer'],['Mänsklig påverkan','paaverkan']])],
+      ['Noterade naturvårdsarter', value('naturvardsarter') || 'Ej angivet'],
       ['Landskap', groups([['Anslutande värden','anslutande'],['Landskapsekologi','landskap'],['Gränsdragning','grans']])]
     ]
   };
@@ -36,7 +37,7 @@ h1{font:600 38px Georgia,serif;margin-bottom:5px}h2{font:600 23px Georgia,serif;
 .report-field b{font-size:12px;text-transform:uppercase;color:#255d4b}.report-field span,p{white-space:pre-wrap}
 figure{display:inline-block;width:47%;vertical-align:top;margin:1%;break-inside:avoid}figure img{max-width:100%;max-height:380px;object-fit:contain}figcaption{font-size:12px;color:#68746d}
 @media(max-width:600px){.report-field{grid-template-columns:1fr}figure{width:100%;margin:12px 0}}@media print{body{margin:10mm;padding:0}}
-</style></head><body><p class="meta">FÄLTRAPPORT · OMRÅDESBESKRIVNING</p><h1>${esc(report.title)}</h1><p class="meta">${esc(report.meta)}</p><p class="meta">${esc(report.scale)}</p><h2>Sammanfattning</h2><p>${esc(report.summary)}</p>${report.sections.map(([title, rows]) => `<h2>${esc(title)}</h2>${fields(rows)}`).join('')}<h2>Bilder</h2>${figures || (includeImages ? '<p>Inga bilder tillagda.</p>' : '<p>Rapporten exporterades utan bilder.</p>')}</body></html>`;
+</style></head><body><p class="meta">FÄLTRAPPORT · OMRÅDESBESKRIVNING</p><h1>${esc(report.title)}</h1><p class="meta">${esc(report.meta)}</p><p class="meta">${esc(report.scale)}</p><h2>Sammanfattning</h2><p>${esc(report.summary)}</p>${report.sections.map(([title, rows]) => `<h2>${esc(title)}</h2>${typeof rows === 'string' ? `<p>${esc(rows)}</p>` : fields(rows)}`).join('')}<h2>Bilder</h2>${figures || (includeImages ? '<p>Inga bilder tillagda.</p>' : '<p>Rapporten exporterades utan bilder.</p>')}</body></html>`;
 }
 
 async function prepareWordImages(snapshotImages) {
@@ -86,7 +87,7 @@ function buildWordDocument(report, preparedImages) {
     paragraph(report.scale, {style:'ReportMeta'}),
     heading('Sammanfattning'), paragraph(report.summary)
   ];
-  for (const [title, rows] of report.sections) children.push(heading(title), table(rows));
+  for (const [title, rows] of report.sections) children.push(heading(title), typeof rows === 'string' ? paragraph(rows) : table(rows));
   children.push(heading('Bilder'));
   if (!preparedImages.length) children.push(paragraph('Inga bilder tillagda.'));
   for (const image of preparedImages) {
