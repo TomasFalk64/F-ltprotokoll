@@ -1,0 +1,189 @@
+Mall för områdesbeskrivning (Fältrapport)
+Områdesbeskrivning
+Kort sammanfattning av områdets viktigaste karaktärer och naturvärdesstrukturer (1–4 meningar). Ange om någon del inte har kunnat inventeras.
+
+[FRITEXT]
+
+Grunduppgifter
+Delområde-ID:
+Namn på delområde:
+Kommun / Ort:
+Fastighetsbeteckning:
+Areal (ha):
+Inventeringsdatum (ÅÅÅÅ-MM-DD):
+Inventerare:
+
+
+Inventeringsmetod:
+[ ] Översiktlig områdesbeskrivning
+[ ] Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad: ______
+[ ] Riktad artinventering: ______
+[ ] Annan: ______
+
+Inventeringens täckning:
+[ ] Hela området genomgånget
+[ ] Större delen genomgången
+[ ] Delar/stickprov
+
+Begränsningar:
+[ ] Inga betydande
+[ ] Snötäckt mark
+[ ] Tät vegetation/dålig sikt
+[ ] Svårframkomlig terräng
+[ ] Tidsbegränsning
+[ ] Annat: ______
+
+[INFOGA KARTBILD]
+
+Trädskikt och skogstyp
+Skogstyp:
+[ ] Grandominerad
+[ ] Talldominerad
+[ ] Barrblandskog
+[ ] Blandskog barr/löv
+[ ] Lövdominerad
+
+Trädslag som förekommer:
+[ ] Gran [ ] Tall [ ] Björk [ ] Asp [ ] Sälg [ ] Rönn [ ] Ek [ ] Övrigt: ___
+
+Särskilda skogstyper:
+[ ] Hällmarkstallskog
+[ ] Sumpskog
+[ ] Tallmosse
+[ ] Bäckdrag
+[ ] Ädellöv
+
+Åldersstruktur:
+[ ] Likåldrig
+[ ] Viss åldersspridning
+[ ] Olikåldrig / flera trädgenerationer
+
+Skiktning:
+[ ] Enskiktad 
+[ ] Tvåskiktad 
+[ ] Flerskiktad
+
+Ålder & Diameter:
+
+Dominerande ålder: ___ år
+
+
+Naturvärdesträd (NVT)
+Ange förekomst för varje typ: 0 = saknas, 1 = enstaka, 2 = sparsamt, 3 = måttligt, 4 = rikligt
+
+Gamla barrträd (plattkronor/grov bark etc.): 		___
+Särskilt värdefulla lövträd (asp, sälg, rönn, ek):	___
+Grova träd (>50 cm dbh): 				___
+Hålträd/stamhåligheter: 				___
+Skadade träd/brandljud/blottad ved: 			___
+Träd med riklig lav-/mossvegetation: 			___
+Kjolgranar/senvuxna undertryckta träd: 			___
+
+Beståndsstruktur:
+[ ] Slutet
+[ ] Luckor/öppningar
+[ ] Riklig underväxt
+
+Terräng & Markförhållanden
+Topografi:
+[ ] Plant
+[ ] Sluttande
+[ ] Kuperat
+[ ] Branter/Lodytor
+[ ] Blockmark
+
+Jordart:
+[ ] Morän
+[ ] Sand/Grus
+[ ] Torv/Organisk
+[ ] Lera
+[ ] Berg i dagen
+
+Markfuktighet:
+[ ] Torr
+[ ] Frisk
+[ ] Fuktig
+[ ] Blöt
+
+Hydrologi:
+[ ] Källpåverkat/Översilning
+[ ] Bäck/Dike
+[ ] Småvatten
+[ ] Sumpskogsstråk
+
+Markkemi:
+[ ] Kalkpåverkad / Rikt markvatten
+[ ] Surt / Näringsfattigt
+
+Markvegetation
+Vegetationstyp:
+[ ] Risdominerad (blåbär, lingon, ljung)
+[ ] Mossdominerad (husmossa, väggmossa)
+[ ] Ört-/Gräsrik (högörter, lågörter)
+[ ] Ormbunksrik
+[ ] Fuktvegetation (vitmossor, starr, fräken)
+[ ] Kalkindikatorer (notera arter nedan)
+
+Särskilda strukturer & småmiljöer
+[ ] Lodytor / bergväggar
+[ ] Block / beskuggade block
+[ ] Hällmarker
+[ ] Källmiljö / översilning
+[ ] Bäck / fuktstråk
+[ ] Sumpskog
+[ ] Övergång skog–myr/våtmark
+[ ] Solexponerad ved / gamla träd
+[ ] Annat: ______
+
+
+Död ved
+Ange trädslag
+Ange förekomst för varje typ: 0 = saknas, 1 = enstaka, 2 = sparsamt, 3 = måttligt, 4 = rikligt
+Ange grovlek för varje typ:  Klena (<20 cm)   Förekomst av grova (>40 cm)
+Ange mikroklimat för varje typ:  Solexponerad Beskuggad / Fuktig
+
+Lågor (liggande död ved):    		___  ___  ___	___ ,  ___  ___  ___	___ , ___  ___  ___	___
+Torrakor (stående helt döda träd):  	___  ___  ___	___ ,  ___  ___  ___	___ , ___  ___  ___	___
+Högstubbar (brutna stående stammar):  	___  ___  ___	___ ,  ___  ___  ___	___ , ___  ___  ___	___
+Nyligen bildad död ved:  		___  ___  ___	___ ,  ___  ___  ___	___ , ___  ___  ___	___
+Starkt nedbrutna lågor (mjuk ved): 	___  ___  ___	___ ,  ___  ___  ___	___ , ___  ___  ___	___
+
+
+Processer, Kontinuitet & Påverkan
+Naturprocesser & Kontinuitet:
+[ ] Lång trädkontinuitet
+[ ] Kontinuerlig tillförsel av död ved
+[ ] Naturlig självgallring / Luckdynamik
+[ ] Rotvältor / Vindfällen
+[ ] Brandspår (kolade stubbar/träd)
+[ ] Naturlig översvämning / vattenståndsvariation
+
+Mänsklig påverkan:
+[ ] Gamla stubbar
+[ ] Färska stubbar 
+[ ] Gallrat / Röjt
+[ ] Stickvägar / Körskador i mark
+[ ] Dikning (aktiva / igensatta dikesdrag)
+[ ] Plantering / Markberett
+[ ] Vägar / kraftledningsgata / annan exploatering
+
+Noterade naturvårdsarter
+Inkludera rödlistade arter, signalarter och fridlysta arter.
+
+
+Angränsande naturvärden & Landskapssamband
+Anslutande värden:
+[ ] Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)
+[ ] Äldre skog gränsar till området
+
+Landskapsekologi:
+[ ] Ingår i ett större sammanhängande värdeområde
+[ ] Ekologisk korridor / Bäckdrag
+
+Gränsdragning:
+[ ] Ekologisk gräns
+[ ] Administrativ gräns (fastighetsgräns/hyggeskant)
+
+Bilder
+[INFOGA BILD 1: Översiktsbild av beståndet]
+[INFOGA BILD 2: Särskilt naturvärdeselement]
