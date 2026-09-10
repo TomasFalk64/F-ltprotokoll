@@ -10,7 +10,7 @@
   <header class="topbar">
     <div class="brand"><span class="brand-mark">F</span><div><strong>Fältprotokoll</strong><span>Områdesbeskrivning</span></div></div>
     <span class="topbar-area" id="topbarArea"></span>
-    <div class="top-actions"><button class="button button-quiet" id="clearButton" type="button">Rensa</button><button class="button button-primary" id="saveButton" type="button" title="Spara JSON, Word och HTML med bilder">Spara</button><button class="button button-outline" id="importButton" type="button">Importera</button></div>
+    <div class="top-actions"><button class="button button-quiet" id="clearButton" type="button">Rensa</button><button class="button button-primary" id="saveButton" type="button" title="Välj format och spara inventering">Spara</button><button class="button button-outline" id="importButton" type="button">Importera</button></div>
     <input id="importFile" type="file" accept=".json,application/json" hidden>
   </header>
 
@@ -23,7 +23,7 @@
     <p class="storage-status" id="status" aria-live="polite"></p>
     <section class="saved-files" id="savedFiles" hidden aria-label="Senast skapade filer">
       <strong>Senast skapade filer</strong>
-      <p>Spara skapar JSON, Word och HTML. Om webbläsaren blockerar flera nedladdningar kan du hämta filerna var för sig här. Importera JSON-filen för att fortsätta redigera.</p>
+      <p>Här finns de filer du valde att spara. Om webbläsaren blockerar flera nedladdningar kan du hämta filerna var för sig här. Importera JSON-filen för att fortsätta redigera.</p>
       <div id="savedFileLinks" class="export-actions"></div>
     </section>
     <noscript>JavaScript måste vara aktiverat för att fylla i och spara rapporten.</noscript>
@@ -46,7 +46,7 @@
 
       <section class="panel"><div class="section-heading"><span class="section-number">06</span><div><p class="eyebrow">VEGETATION</p><h2>Markvegetation</h2></div></div><div class="subsection"><h3>Vegetationstyp</h3><div class="choice-grid three">{{VEGETATION}}</div></div><div class="subsection"><h3>Särskilda strukturer & småmiljöer</h3><div class="choice-grid four">{{STRUKTURER}}</div></div></section>
 
-      <section class="panel"><div class="section-heading"><span class="section-number">07</span><div><p class="eyebrow">DÖD VED</p><h2>Död ved</h2><p class="hint">Ange trädslag, förekomst (0 saknas · 1 enstaka · 2 sparsamt · 3 måttligt · 4 rikligt), grovlek och mikroklimat. Specificera skillnader mellan trädslag i kommentaren.</p></div></div><div class="deadwood-table">{{DODVED}}</div></section>
+      <section class="panel"><div class="section-heading"><span class="section-number">07</span><div><p class="eyebrow">DÖD VED</p><h2>Död ved</h2><p class="hint">Registrera liggande och stående död ved per trädslag. Vedkaraktär tillåter flera val och anpassas efter trädslag. – betyder ej bedömt.</p></div></div><div class="deadwood-table">{{DODVED}}</div></section>
 
       <section class="panel"><div class="section-heading"><span class="section-number">08</span><div><p class="eyebrow">PÅVERKAN</p><h2>Processer, kontinuitet & påverkan</h2></div></div><div class="subsection"><h3>Naturprocesser & kontinuitet</h3><div class="choice-grid three">{{PROCESSER}}</div></div><div class="subsection"><h3>Mänsklig påverkan</h3><div class="choice-grid three">{{PAAVERKAN}}</div></div></section>
 
@@ -58,10 +58,30 @@
     </form>
 
   </main>
+  <dialog id="saveDialog" aria-labelledby="saveDialogTitle">
+    <form id="saveOptionsForm">
+      <h2 id="saveDialogTitle">Spara inventering</h2>
+      <fieldset><legend>Datafil</legend>
+        <label class="save-choice"><input id="saveJson" type="checkbox" checked> JSON</label>
+        <p class="hint">Komplett datafil som kan importeras och redigeras igen.</p>
+      </fieldset>
+      <fieldset><legend>Rapportformat</legend>
+        <label class="save-choice"><input id="saveWord" type="checkbox" checked> Word</label>
+        <label class="save-choice"><input id="saveHtml" type="checkbox" checked> HTML</label>
+      </fieldset>
+      <fieldset id="reportContentOptions"><legend>Rapportens innehåll</legend>
+        <label class="save-choice"><input type="radio" name="reportMode" id="saveCompact" value="compact" checked> Kompakt – dölj fält som inte är ifyllda</label>
+        <label class="save-choice"><input type="radio" name="reportMode" value="full"> Fullständig – visa även fält som inte är ifyllda</label>
+      </fieldset>
+      <p id="saveFormatHint" class="hint" role="status" hidden>Välj minst ett filformat.</p>
+      <div class="save-dialog-actions"><button id="cancelSave" class="button button-quiet" type="button">Avbryt</button><button id="confirmSave" class="button button-primary" type="submit">Spara</button></div>
+    </form>
+  </dialog>
   <script src="vendor/docx-9.5.1.js"></script>
   <script src="vendor/geotiff-2.1.3.js"></script>
   <script src="spatial-input.js"></script>
   <script src="report-export.js"></script>
+  <script src="deadwood.js"></script>
   <script src="app.js"></script>
   <script src="protocol-transfer.js"></script>
 </body>

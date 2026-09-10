@@ -39,6 +39,7 @@ function validateProtocol(value) {
   for (const entry of value.fields) {
     if (!Array.isArray(entry) || entry.length !== 2 || entry.some(item => typeof item !== 'string')) fail('Filen innehåller ogiltiga fältvärden.');
     const [name, text] = entry;
+    if (['ved_liggande', 'ved_staende'].includes(name)) parseWood(text);
     if (text.length > 100000) fail('Ett textfält är för långt.');
     const matches = controls.filter(control => control.name === name && control.type !== 'file');
     if (!matches.length) fail(`Okänt fält: ${name}. Importen avbröts för att undvika att uppgifter försvinner.`);
@@ -88,6 +89,7 @@ function applyProtocol(snapshot) {
     if (control.type === 'checkbox') control.checked = values.includes(control.value);
     else if (control.type !== 'file') control.value = values[0] || '';
   }
+  restoreWood();
   images = {...snapshot.images};
   showImages();
   saveDraft();
@@ -96,7 +98,36 @@ function applyProtocol(snapshot) {
   setStatus('Protokollet har importerats. Du kan nu komplettera uppgifter och bilder.');
 }
 
-async function saveAll() {
+function updateSaveOptions() {
+  const json = document.querySelector('#saveJson').checked;
+  const word = document.querySelector('#saveWord').checked;
+  const html = document.querySelector('#saveHtml').checked;
+  document.querySelector('#reportContentOptions').disabled = !word && !html;
+  document.querySelector('#confirmSave').disabled = !json && !word && !html;
+  document.querySelector('#saveFormatHint').hidden = json || word || html;
+}
+function openSaveDialog() {
+  if (exportInProgress) return;
+  updateSaveOptions();
+  document.querySelector('#saveDialog').showModal();
+}
+document.querySelector('#saveOptionsForm').addEventListener('change', updateSaveOptions);
+document.querySelector('#cancelSave').addEventListener('click', () => document.querySelector('#saveDialog').close());
+document.querySelector('#saveOptionsForm').addEventListener('submit', event => {
+  event.preventDefault();
+  const options = {
+    json:document.querySelector('#saveJson').checked,
+    word:document.querySelector('#saveWord').checked,
+    html:document.querySelector('#saveHtml').checked,
+    compact:document.querySelector('#saveCompact').checked
+  };
+  if (!options.json && !options.word && !options.html) return;
+  document.querySelector('#saveDialog').close();
+  return saveAll(options);
+});
+
+async function saveAll(options = {json:true, word:true, html:true, compact:true}) {
+  if (!options.json && !options.word && !options.html) return;
   if (exportInProgress || !form.reportValidity()) return;
   if (pendingImages || pendingSpatialFiles) { setStatus('Vänta tills bilder och polygon har lästs in och spara sedan igen.'); return; }
   const snapshot = protocolData();
@@ -106,17 +137,16 @@ async function saveAll() {
   const button = document.querySelector('#saveButton');
   button.disabled = true;
   button.textContent = 'Sparar…';
-  setStatus('Skapar JSON, Word och HTML…');
+  setStatus('Skapar valda filer…');
   try {
     validateProtocol(snapshot);
     const json = JSON.stringify({...snapshot, savedAt:new Date().toISOString()}, null, 2);
-    if (new Blob([json]).size > MAX_IMPORT_BYTES) throw new Error('Protokollet överstiger 30 MB. Minska antalet eller storleken på bilderna före sparandet.');
-    const files = [
-      {name:`${base}.json`, label:'JSON – redigerbart protokoll', blob:new Blob([json], {type:'application/json;charset=utf-8'})},
-      {name:`${base}.docx`, label:'Word – rapport med bilder', blob:await wordReport(snapshot)},
-      {name:`${base}.html`, label:'HTML – rapport med bilder', blob:new Blob([reportHtml(true, snapshot)], {type:'text/html;charset=utf-8'})}
-    ];
-    // All three files come from the same snapshot, even if typing continues.
+    if (options.json && new Blob([json]).size > MAX_IMPORT_BYTES) throw new Error('Protokollet överstiger 30 MB. Minska antalet eller storleken på bilderna före sparandet.');
+    const files = [];
+    if (options.json) files.push({name:`${base}.json`, label:'JSON – redigerbart protokoll', blob:new Blob([json], {type:'application/json;charset=utf-8'})});
+    if (options.word) files.push({name:`${base}.docx`, label:'Word – rapport med bilder', blob:await wordReport(snapshot, options.compact)});
+    if (options.html) files.push({name:`${base}.html`, label:'HTML – rapport med bilder', blob:new Blob([reportHtml(true, snapshot, options.compact)], {type:'text/html;charset=utf-8'})});
+    // All selected files come from the same snapshot, even if typing continues.
     const previousUrls = exportUrls;
     const links = document.querySelector('#savedFileLinks');
     links.replaceChildren();
@@ -134,7 +164,7 @@ async function saveAll() {
     for (const link of links.children) link.click();
     setTimeout(() => previousUrls.forEach(url => URL.revokeObjectURL(url)), 30000);
     lastSavedSignature = signature;
-    setStatus('Tre filer har skickats till nedladdningar. Om någon saknas, använd de separata länkarna ovan. JSON-filen används vid import.');
+    setStatus(`${files.length} ${files.length === 1 ? 'fil har' : 'filer har'} skickats till nedladdningar. Om någon saknas, använd länkarna ovan.`);
   } catch (error) {
     setStatus(`Kunde inte skapa alla rapportfiler. ${error.message} Dina uppgifter finns kvar i formuläret.`);
   } finally {

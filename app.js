@@ -21,14 +21,13 @@ function normalizeFields(entries) {
     if (text && !text[1].includes(system)) text[1] += `${textName === 'polygonGeojson' ? '\n' : ' '}Koordinatsystem: ${system}`;
     else if (!text) fields.push([textName, `Koordinatsystem: ${system}`]);
   }
-  return fields.filter(([name]) => !['polygonCrs','centerCrs'].includes(name));
+  return migrateWood(fields.filter(([name]) => !['polygonCrs','centerCrs'].includes(name)));
 }
 const fieldNames = ['metod','tackning','begransning','skogstyp','tradslag','sarskildSkog','aldersstruktur','skiktning','bestandsstruktur','topografi','jordart','markfuktighet','hydrologi','markkemi','vegetation','strukturer','processer','paaverkan','anslutande','landskap','grans'];
 const options = {
   metod:['Översiktlig områdesbeskrivning','Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad','Riktad artinventering','Annan'], tackning:['Hela området genomgånget','Större delen genomgången','Delar/stickprov'], begransning:['Inga betydande','Snötäckt mark','Tät vegetation/dålig sikt','Svårframkomlig terräng','Tidsbegränsning'], skogstyp:['Grandominerad','Talldominerad','Barrblandskog','Blandskog barr/löv','Lövdominerad'], tradslag:['Gran','Tall','Björk','Asp','Sälg','Rönn','Ek'], sarskildSkog:['Hällmarkstallskog','Sumpskog','Tallmosse','Bäckdrag','Ädellöv'], aldersstruktur:['Likåldrig','Viss åldersspridning','Olikåldrig / flera trädgenerationer'], skiktning:['Enskiktad','Tvåskiktad','Flerskiktad'], bestandsstruktur:['Slutet','Luckor/öppningar','Riklig underväxt'], topografi:['Plant','Sluttande','Kuperat','Branter/Lodytor','Blockmark'], jordart:['Morän','Sand/Grus','Torv/Organisk','Lera','Berg i dagen'], markfuktighet:['Torr','Frisk','Fuktig','Blöt'], hydrologi:['Källpåverkat/Översilning','Bäck/Dike','Småvatten','Sumpskogsstråk'], markkemi:['Kalkpåverkad / Rikt markvatten','Surt / Näringsfattigt'], vegetation:['Risdominerad (blåbär, lingon, ljung)','Mossdominerad (husmossa, väggmossa)','Ört-/Gräsrik (högörter, lågörter)','Ormbunksrik','Fuktvegetation (vitmossor, starr, fräken)','Kalkindikatorer'], strukturer:['Lodytor / bergväggar','Block / beskuggade block','Hällmarker','Källmiljö / översilning','Bäck / fuktstråk','Sumpskog','Övergång skog–myr/våtmark','Solexponerad ved / gamla träd'], processer:['Lång trädkontinuitet','Kontinuerlig tillförsel av död ved','Naturlig självgallring / Luckdynamik','Rotvältor / Vindfällen','Brandspår (kolade stubbar/träd)','Naturlig översvämning / vattenståndsvariation'], paaverkan:['Gamla stubbar','Färska stubbar','Gallrat / Röjt','Stickvägar / Körskador i mark','Dikning (aktiva / igensatta dikesdrag)','Plantering / Markberett','Vägar / kraftledningsgata / annan exploatering'], anslutande:['Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)','Äldre skog gränsar till området'], landskap:['Ingår i ett större sammanhängande värdeområde','Ekologisk korridor / Bäckdrag'], grans:['Ekologisk gräns','Administrativ gräns (fastighetsgräns/hyggeskant)']
 };
 const nvt = ['Gamla barrträd (plattkronor/grov bark etc.)','Särskilt värdefulla lövträd (asp, sälg, rönn, ek)','Grova träd (>50 cm dbh)','Hålträd/stamhåligheter','Skadade träd/brandljud/blottad ved','Träd med riklig lav-/mossvegetation','Kjolgranar/senvuxna undertryckta träd'];
-const deadwood = ['Lågor (liggande död ved)','Torrakor (stående helt döda träd)','Högstubbar (brutna stående stammar)','Nyligen bildad död ved','Starkt nedbrutna lågor (mjuk ved)'];
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const scale = ['0 – saknas', '1 – enstaka', '2 – sparsamt', '3 – måttligt', '4 – rikligt'];
 const details = {metod:'Nivå/detaljeringsgrad, inriktning eller annan metod', begransning:'Beskriv begränsningar och delar som inte inventerats', tradslag:'Övriga trädslag', strukturer:'Kommentar markvegetation'};
@@ -43,7 +42,7 @@ const tokens = Object.fromEntries(fieldNames.map(name => [name.toUpperCase(), ch
 tokens.BEGRANSNINGAR = tokens.BEGRANSNING;
 tokens.NVT = nvt.map((item, i) => `<div class="score-row"><label for="nvt${i}">${escapeHtml(item)}</label>${select(`nvt${i}`, item)}</div>`).join('');
 tokens.MARKBLOCK = markGroups.map(([title, name]) => `<div class="subsection"><h3>${title}</h3><div class="choice-grid ${name === 'markkemi' ? 'three' : 'four'}">${choices(name, options[name])}</div></div>`).join('');
-tokens.DODVED = deadwood.map((item, i) => `<fieldset class="dead-entry"><legend>${item}</legend><div class="field-grid two"><label>Trädslag<input name="ved${i}tradslag" placeholder="Ex. gran, tall; specificera skillnader nedan"></label><label>Förekomst${select(`ved${i}forekomst`, `${item}: förekomst`)}</label><label>Grovlek<select name="ved${i}grovlek"><option value="">Ej bedömt</option><option>Klen (&lt;20 cm)</option><option>Medelgrov (20–40 cm)</option><option>Grov (&gt;40 cm)</option><option>Flera grovlekar (ange nedan)</option></select></label><label>Mikroklimat<select name="ved${i}klimat"><option value="">Ej bedömt</option><option>Solexponerad</option><option>Beskuggad / fuktig</option><option>Både solexponerad och beskuggad / fuktig</option></select></label><label class="choice-detail">Död ved kommentar<textarea name="ved${i}detalj" rows="2" placeholder="Ex. gran: 3, grov, beskuggad; tall: 1, klen, solexponerad"></textarea></label></div></fieldset>`).join('');
+tokens.DODVED = woodGroups.map(([id, title]) => woodGroupHtml(id, title)).join('');
 form.innerHTML = form.innerHTML.replace(/\{\{([A-Z]+)\}\}/g, (_, token) => {
   if (!(token in tokens)) throw new Error(`Okänd mallmarkör: ${token}`);
   return tokens[token];
@@ -103,6 +102,7 @@ function restoreDraft() {
       if (el.type === 'checkbox') el.checked = values.includes(el.value);
       else if (el.type !== 'file') el.value = values[0] || '';
     }
+    restoreWood();
     const savedImages = JSON.parse(localStorage.getItem('faltrapport-images') || '{}');
     for (const id of Object.keys(imageLabels)) {
       if (typeof savedImages?.[id] === 'string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(savedImages[id])) images[id] = savedImages[id];
@@ -118,11 +118,12 @@ function restoreDraft() {
 form.addEventListener('submit', event => event.preventDefault());
 form.addEventListener('input', saveDraft);
 form.addEventListener('change', saveDraft);
-document.querySelector('#saveButton').addEventListener('click', () => saveAll());
+document.querySelector('#saveButton').addEventListener('click', () => openSaveDialog());
 document.querySelector('#clearButton').addEventListener('click', () => {
   if (!confirm('Rensa alla uppgifter och bilder i utkastet? Nedladdade rapportfiler påverkas inte.')) return;
   imageGeneration++;
   form.reset();
+  restoreWood();
   images = {};
   lastSavedSignature = null;
   showImages();
@@ -182,5 +183,6 @@ document.querySelectorAll('.image-input').forEach(input => input.addEventListene
     input.value = '';
   }
 }));
+setupWood();
 setupPolygonImport();
 restoreDraft();

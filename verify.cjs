@@ -25,7 +25,7 @@ function setup(saved = {}, blocked = false) {
   const downloads = new Map();
   const confirmation = {answer:true, calls:0};
   const context = vm.createContext({
-    document: {querySelector: selector => selector === '#reportForm' ? form : node(selector), getElementById: node, querySelectorAll: () => [], createElement: () => node(`created-${elements.size}`)},
+    document: {addEventListener(){}, querySelector: selector => selector === '#reportForm' ? form : node(selector), getElementById: node, querySelectorAll: () => [], createElement: () => node(`created-${elements.size}`)},
     Blob, URL:{createObjectURL(blob){const url = `blob:${downloads.size}`; downloads.set(url, blob); return url;}, revokeObjectURL(){}},
     setTimeout(){}, confirm(){confirmation.calls++; return confirmation.answer;},
     localStorage: {getItem: key => {if (blocked) throw Error('blocked'); return storage.get(key) || null;}, setItem: (key, value) => {if (blocked) throw Error('quota'); storage.set(key, value);}},
@@ -34,6 +34,7 @@ function setup(saved = {}, blocked = false) {
   // Populate the model from the actual rendered form before draft restoration.
   const cut = source.lastIndexOf('restoreDraft();');
   vm.runInContext(fs.readFileSync('spatial-input.js', 'utf8'), context);
+  vm.runInContext(fs.readFileSync('deadwood.js', 'utf8'), context);
   vm.runInContext(fs.readFileSync('report-export.js', 'utf8'), context);
   vm.runInContext(source.slice(0, cut), context);
   vm.runInContext(fs.readFileSync('protocol-transfer.js', 'utf8'), context);
@@ -49,20 +50,32 @@ function setup(saved = {}, blocked = false) {
   return {context, form, controls, storage, node, downloads, confirmation, run: code => vm.runInContext(code, context), field: name => controls.find(el => el.name === name)};
 }
 const app = setup();
+for (const id of ['saveJson', 'saveWord', 'saveHtml', 'saveCompact']) assert(new RegExp(`<input[^>]*id="${id}"[^>]*checked`).test(html), `${id} is selected by default`);
+const compactApp = setup();
+compactApp.context.compactSnapshot = {fields:[['namn','Testområde'], ['kommun',null], ['fastighet',[]], ['areal',0], ['datum',''], ['inventerare','Ej angivet'], ['alderDiameter','Ej bedömt'], ['nvt0','0']], images:{}};
+const compactHtml = compactApp.run('reportHtml(true, compactSnapshot, true)');
+assert(!compactHtml.includes('<b>Kommun / Ort</b>'));
+assert(!compactHtml.includes('<b>Fastighetsbeteckning</b>'));
+assert(!compactHtml.includes('<b>Inventerare</b>'));
+assert(compactHtml.includes('<b>Areal (ha)</b><span>0</span>'));
+assert(compactHtml.includes('<span>Ej bedömt</span>'));
+assert(!compactHtml.includes('<h2>Bilder</h2>'));
+assert(!compactHtml.includes('<h2>Sammanfattning</h2>'));
+assert(!compactHtml.includes('<h2>Landskap</h2>'));
+assert(compactApp.run('reportHtml(true, compactSnapshot, false)').includes('<b>Kommun / Ort</b><span>Ej angivet</span>'));
 assert(!app.form.innerHTML.includes('{{'), 'All template tokens render');
-for (const name of ['tackning','begransning','topografi','jordart','markfuktighet','hydrologi','markkemi','metodDetalj','tradslagDetalj','ved0tradslag','ved4detalj']) assert(app.field(name), name);
+for (const name of ['tackning','begransning','topografi','jordart','markfuktighet','hydrologi','markkemi','metodDetalj','tradslagDetalj','ved_liggande','ved_staende_kommentar']) assert(app.field(name), name);
 assert(app.form.innerHTML.includes('class="choice-grid three"'), 'Grid wrappers preserved');
 assert(app.form.innerHTML.includes('id="mapImage"'), 'Map upload exists');
 app.field('namn').value = '<script>alert("x")</script> & Åäö';
 app.field('sammanfattning').value = 'Rad ett\nRad två <b>text</b>';
 app.field('nvt0').value = '0';
-app.field('ved0tradslag').value = 'Gran';
-app.field('ved0forekomst').value = '0';
+app.field('ved_liggande').value = app.run("JSON.stringify([{...emptyWoodRow(), tradslag:'Gran', forekomst:'Saknas', karaktar:['Hålig', 'Barkborrepräglad']}])");
 app.field('metodDetalj').value = 'Detaljer <test>';
 app.field('alderDiameter').value = 'Kommentar om träden';
 app.field('terrangKommentar').value = 'Brant i norr\nBlockig mark';
 app.field('strukturerDetalj').value = 'Kommentar om vegetationen';
-app.field('ved0detalj').value = 'Kommentar om veden';
+app.field('ved_liggande_kommentar').value = 'Kommentar om veden';
 app.field('naturvardsarter').value = 'Artobservation på egen rad';
 app.field('polygonGeojson').value = JSON.stringify({type:'Polygon',coordinates:[[[18,59],[19,59],[19,60],[18,59]]]});
 app.field('centerCoordinate').value = '18.5, 59.5';
@@ -73,7 +86,8 @@ assert(report.includes('&lt;script&gt;'));
 assert(report.includes('Åäö'));
 assert(report.includes('Rad ett\nRad två &lt;b&gt;text&lt;/b&gt;'));
 assert(report.includes('<span>0</span>'));
-assert(report.includes('Trädslag: Gran · Förekomst: 0'));
+assert(report.includes('Trädslag: Gran · Förekomst: Saknas'));
+assert(report.includes('Hålig, Barkborrepräglad'));
 assert(report.includes('Detaljer &lt;test&gt;'));
 assert(report.includes('Kommentar trädskikt'));
 assert(report.includes('Kommentar terräng'));
@@ -81,7 +95,7 @@ assert(report.includes('Polygon (JSON/GeoJSON)'));
 assert(report.includes('18.5, 59.5'));
 assert(report.includes('Brant i norr\nBlockig mark'));
 assert(report.includes('Kommentar markvegetation'));
-assert(report.includes('Död ved kommentar: Kommentar om veden'));
+assert(report.includes('Kommentar – liggande död ved</b><span>Kommentar om veden'));
 assert(report.includes('<h2>Noterade naturvårdsarter</h2><p>Artobservation på egen rad</p>'));
 assert(!report.includes('</div>,<div'));
 assert(app.run('reportHtml(true)').includes('Inga bilder tillagda.'));
@@ -94,6 +108,7 @@ app.run('saveDraft()');
 const restored = setup(Object.fromEntries(app.storage));
 assert.equal(restored.field('namn').value, app.field('namn').value);
 assert.equal(restored.field('nvt0').value, '0');
+assert.equal(restored.field('ved_liggande').value, app.field('ved_liggande').value);
 assert.equal(restored.field('tackning').checked, true);
 assert.equal(restored.run('Object.keys(images).length'), 2);
 const legacy = setup({'faltrapport-draft': JSON.stringify([['namn','Äldre utkast']])});
@@ -109,6 +124,43 @@ unavailable.run("setStatus('Bild tillagd.')");
 assert(unavailable.node('#status').textContent.includes('kunde inte sparas'), 'Storage failure remains visible in the single status line');
 assert(unavailable.run('reportHtml(false)').includes('<!doctype html>'));
 console.log('PASS: template sections, escaping, zero values, image inclusion/exclusion, draft restoration, legacy draft and storage failures.');
+
+const woodTest = setup();
+const woodRows = woodTest.run("JSON.stringify([{...emptyWoodRow(), tradslag:'Tall', forekomst:'Rikligt', grovlek:'Grov >40 cm', nedbrytning:'Mycket starkt nedbruten', karaktar:['Hålig','Keloved/silverved','Annat'], annat:'Spår <test>', klimat:'Solexponerad'}, {...emptyWoodRow(), tradslag:'Gran', karaktar:['Barkborrepräglad']}])");
+woodTest.field('ved_liggande').value = woodRows;
+woodTest.field('ved_staende').value = woodTest.run("JSON.stringify([{...emptyWoodRow(), tradslag:'Annat', annatTradslag:'Hassel', forekomst:'Saknas'}])");
+woodTest.run('applyProtocol(validateProtocol(protocolData()))');
+assert.equal(woodTest.field('ved_liggande').value, woodRows);
+assert(woodTest.run('reportHtml(false)').includes('Annat: Spår &lt;test&gt;'));
+assert(woodTest.run('reportHtml(false)').includes('Trädslag: Hassel · Förekomst: Saknas'));
+woodTest.field('ved_liggande').value = woodTest.run("JSON.stringify([{...emptyWoodRow(), annat:'Egen vedkaraktär'}])");
+woodTest.run('applyProtocol(validateProtocol(protocolData()))');
+assert(woodTest.run('reportHtml(false)').includes('Vedkaraktär: Annat: Egen vedkaraktär'));
+assert.equal(woodTest.run("woodCharacterSummary(parseWood(protocolData().fields.find(([name]) => name === 'ved_liggande')[1])[0])"), 'Egen vedkaraktär');
+for (const invalid of ["{tradslag:'Gran', karaktar:['Keloved/silverved']}", "{tradslag:'Tall', karaktar:['Barkborrepräglad']}", "{forekomst:'0'}", "{karaktar:['Hålig','Hålig']}", "{nedbrytning:'Okänd'}"]) {
+  woodTest.field('ved_liggande').value = woodTest.run(`JSON.stringify([{...emptyWoodRow(), ...${invalid}}])`);
+  assert.throws(() => woodTest.run('validateProtocol(protocolData())'), /Ogiltigt/);
+}
+const woodLegacyFields = [['ved0tradslag','Gran och tall'], ['ved0forekomst','0'], ['ved0detalj','Liggande kommentar'], ['ved1tradslag','Gran'], ['ved2detalj','Högstubbar'], ['ved3detalj','Okänd position'], ['ved4detalj','Mjuk ved']];
+const woodLegacy = setup({'faltrapport-draft':JSON.stringify(woodLegacyFields)});
+assert(!woodLegacy.field('ved_liggande_kommentar').value.includes('Gran och tall'));
+assert(!woodLegacy.field('ved_liggande_kommentar').value.includes('Förekomst: 0'));
+assert(woodLegacy.field('ved_liggande_kommentar').value.includes('Liggande kommentar'));
+assert(woodLegacy.field('ved_liggande_kommentar').value.includes('Okänd position'));
+assert(woodLegacy.field('ved_liggande_kommentar').value.includes('Mjuk ved'));
+assert(woodLegacy.field('ved_staende_kommentar').value.includes('Högstubbar'));
+woodLegacy.context.legacyWood = {format:'faltrapport',version:1,fields:woodLegacyFields,images:{}};
+woodLegacy.run('applyProtocol(validateProtocol(legacyWood))');
+const migratedWood = woodLegacy.field('ved_liggande_kommentar').value;
+woodLegacy.run('applyProtocol(validateProtocol(protocolData()))');
+assert.equal(woodLegacy.field('ved_liggande_kommentar').value, migratedWood);
+const generatedWood = setup({'faltrapport-draft':JSON.stringify([
+  ['ved_liggande_kommentar', 'Äldre uppgifter – Lågor (liggande död ved): Trädslag: Gran · Förekomst: 0\nMin kommentar\n\nFortsättning'],
+  ['ved_staende_kommentar', 'Äldre uppgifter – Högstubbar (brutna stående stammar): Trädslag: Tall · Kommentar: Egen anteckning']
+])});
+assert.equal(generatedWood.field('ved_liggande_kommentar').value, 'Min kommentar\n\nFortsättning');
+assert.equal(generatedWood.field('ved_staende_kommentar').value, 'Egen anteckning');
+console.log('PASS: multiple deadwood rows, species-dependent characters, other text, validation, legacy migration and JSON round trip.');
 
 async function verifyTransfer() {
   const projected = setup();
@@ -218,6 +270,46 @@ async function verifyTransfer() {
   assert.equal(saving.field('namn').value, 'Ändring under sparandet');
   assert(saving.node('#status').textContent.includes('Word unavailable'));
   assert.equal(saving.node('#savedFileLinks').children.length, 3, 'Previous fallback links survive a failed export');
+  const selections = setup();
+  for (const id of ['#saveJson','#saveWord','#saveHtml','#saveCompact']) selections.node(id).checked = true;
+  selections.node('#saveDialog').showModal = function(){this.open = true;};
+  selections.node('#saveDialog').close = function(){this.open = false;};
+  selections.node('#saveButton').click();
+  assert.equal(selections.node('#saveDialog').open, true);
+  assert.equal(selections.downloads.size, 0, 'Opening the dialog does not export');
+  selections.node('#cancelSave').click();
+  assert.equal(selections.node('#saveDialog').open, false);
+  selections.node('#saveWord').checked = selections.node('#saveHtml').checked = false;
+  selections.run('updateSaveOptions()');
+  assert.equal(selections.node('#reportContentOptions').disabled, true);
+  assert.equal(selections.node('#confirmSave').disabled, false);
+  selections.node('#saveJson').checked = false;
+  selections.run('updateSaveOptions()');
+  assert.equal(selections.node('#confirmSave').disabled, true);
+  let wordCalls = 0;
+  selections.context.wordReport = async (snapshot, compact) => {wordCalls++; assert.equal(compact, true); return new Blob(['word']);};
+  for (let mask = 1; mask < 8; mask++) {
+    const options = {json:Boolean(mask & 1), word:Boolean(mask & 2), html:Boolean(mask & 4), compact:true};
+    const previousCalls = wordCalls;
+    selections.node('#saveJson').checked = options.json;
+    selections.node('#saveWord').checked = options.word;
+    selections.node('#saveHtml').checked = options.html;
+    selections.run('updateSaveOptions()');
+    assert.equal(selections.node('#reportContentOptions').disabled, !options.word && !options.html);
+    await selections.node('#saveOptionsForm').events.submit({preventDefault(){}});
+    assert.equal(wordCalls - previousCalls, options.word ? 1 : 0);
+    const files = selections.node('#savedFileLinks').children;
+    assert.deepEqual(files.map(file => file.download.split('.').pop()), [options.json && 'json',options.word && 'docx',options.html && 'html'].filter(Boolean));
+    if (options.json) {
+      const data = JSON.parse(await selections.downloads.get(files[0].href).text());
+      assert.deepEqual(data.fields, JSON.parse(selections.run('JSON.stringify(protocolData().fields)')), 'Compact export preserves all JSON fields');
+    }
+  }
+  selections.context.wordReport = async (snapshot, compact) => {assert.equal(compact, false); return new Blob(['full word']);};
+  await selections.run('saveAll({json:true, word:true, html:true, compact:false})');
+  const fullFiles = selections.node('#savedFileLinks').children;
+  assert((await selections.downloads.get(fullFiles[2].href).text()).includes('<span>Ej angivet</span>'));
+  assert.deepEqual(JSON.parse(await selections.downloads.get(fullFiles[0].href).text()).fields, JSON.parse(selections.run('JSON.stringify(protocolData().fields)')));
   console.log('PASS: JSON round trip, import OK/cancel, validation, corrupt files/images, import race and three-file save snapshot.');
 }
 
@@ -259,7 +351,8 @@ async function verifyWord() {
     const styles = parts.get('word/styles.xml').toString();
     const rels = parts.get('word/_rels/document.xml.rels').toString();
     assert(xml.includes('&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; Åäö'));
-    assert(xml.includes('Trädslag: Gran · Förekomst: 0'));
+    assert(xml.includes('Trädslag: Gran · Förekomst: Saknas'));
+    assert(xml.includes('Hålig, Barkborrepräglad'));
     assert(xml.includes('<w:br/>'), 'Multiline text preserved');
     assert(xml.includes('w:w="11906"'), 'A4 page width');
     assert(xml.includes('w:w="9638"'), 'Explicit table width');
@@ -275,6 +368,13 @@ async function verifyWord() {
     }
   }
   console.log('PASS: real DOCX generation, ZIP parts, text, line breaks, A4/table geometry, styles and embedded images.');
+  runtime.report = compactApp.run('reportContent(compactSnapshot, true)');
+  const compactBlob = await vm.runInContext('docx.Packer.toBlob(buildWordDocument(report, []))', runtime);
+  const compactXml = unzip(Buffer.from(await compactBlob.arrayBuffer())).get('word/document.xml').toString();
+  assert(compactXml.includes('Ej bedömt'));
+  assert(compactXml.includes('>0</w:t>'));
+  for (const omitted of ['Kommun / Ort', 'Fastighetsbeteckning', 'Sammanfattning', 'Ej angivet', 'Landskap', 'Inga bilder tillagda.']) assert(!compactXml.includes(omitted), `${omitted} omitted in compact Word`);
+  console.log('PASS: save dialog, format combinations, complete JSON, compact/full HTML and compact Word.');
 }
 
 (async () => {await verifyTransfer(); await verifyWord();})().catch(error => {console.error(error); process.exitCode = 1;});

@@ -1,15 +1,21 @@
 // Shared report content keeps HTML and Word exports in sync.
-function reportContent(snapshot) {
-  const value = name => snapshot.fields.find(([key]) => key === name)?.[1] || '';
-  const checks = name => [snapshot.fields.filter(([key]) => key === name).map(([, text]) => text).join(', '), name !== 'strukturer' && value(`${name}Detalj`)].filter(Boolean).join(' – ');
-  const field = (label, text) => [label, text || 'Ej angivet'];
+function isReportValueFilled(value) {
+  if (value == null) return false;
+  if (Array.isArray(value)) return value.some(isReportValueFilled);
+  return !['', 'Ej angivet', 'Ej angiven'].includes(String(value).trim());
+}
+function reportContent(snapshot, compact = false) {
+  const value = name => snapshot.fields.find(([key]) => key === name)?.[1] ?? '';
+  const checks = name => [snapshot.fields.filter(([key]) => key === name).map(([, text]) => text).filter(text => !compact || isReportValueFilled(text)).join(', '), ...(name !== 'strukturer' ? [value(`${name}Detalj`)] : [])].filter(text => compact ? isReportValueFilled(text) : Boolean(text)).join(' – ');
+  const field = (label, text) => [label, compact ? text : isReportValueFilled(text) ? text : 'Ej angivet'];
   const basic = [['Delområde-ID','delomradeId'],['Namn på delområde','namn'],['Kommun / Ort','kommun'],['Fastighetsbeteckning','fastighet'],['Areal (ha)','areal'],['Inventeringsdatum','datum'],['Polygon (JSON/GeoJSON)','polygonGeojson'],['Mittpunktskoordinat','centerCoordinate'],['Inventerare','inventerare']];
   const groups = pairs => pairs.map(([label, name]) => field(label, checks(name)));
-  return {
-    title: value('namn') || 'Områdesbeskrivning',
-    id: value('delomradeId'),
-    meta: [value('delomradeId') || 'Ej angivet', value('kommun') || 'Ort ej angiven', value('datum') || 'Datum ej angivet'].join(' · '),
-    summary: value('sammanfattning') || 'Ej angiven',
+  const report = {
+    compact,
+    title: isReportValueFilled(value('namn')) ? value('namn') : 'Områdesbeskrivning',
+    id: compact && !isReportValueFilled(value('delomradeId')) ? '' : value('delomradeId'),
+    meta: compact ? [value('delomradeId'), value('kommun'), value('datum')].filter(isReportValueFilled).join(' · ') : [value('delomradeId') || 'Ej angivet', value('kommun') || 'Ort ej angiven', value('datum') || 'Datum ej angivet'].join(' · '),
+    summary: compact ? value('sammanfattning') : value('sammanfattning') || 'Ej angiven',
     scale: 'Förekomstskala: 0 = saknas, 1 = enstaka, 2 = sparsamt, 3 = måttligt, 4 = rikligt. Tomma fält betyder ej angivet/ej bedömt.',
     sections: [
       ['Grunduppgifter', [...basic.map(([label, name]) => field(label, value(name))), ...groups([['Inventeringsmetod','metod'],['Inventeringens täckning','tackning'],['Begränsningar','begransning']])]],
@@ -17,16 +23,18 @@ function reportContent(snapshot) {
       ['Naturvärdesträd', nvt.map((label, i) => field(label, value(`nvt${i}`)))],
       ['Terräng & markförhållanden', [...groups(markGroups), field('Kommentar terräng', value('terrangKommentar'))]],
       ['Markvegetation', [...groups([['Vegetationstyp','vegetation'],['Särskilda strukturer','strukturer']]), field('Kommentar markvegetation', value('strukturerDetalj'))]],
-      ['Död ved', deadwood.map((label, i) => field(label, [value(`ved${i}tradslag`) && `Trädslag: ${value(`ved${i}tradslag`)}`, value(`ved${i}forekomst`) && `Förekomst: ${value(`ved${i}forekomst`)}`, value(`ved${i}grovlek`), value(`ved${i}klimat`), value(`ved${i}detalj`) && `Död ved kommentar: ${value(`ved${i}detalj`)}`].filter(Boolean).join(' · ')))],
+      ['Död ved', woodReportFields(snapshot.fields, compact)],
       ['Processer & påverkan', groups([['Naturprocesser','processer'],['Mänsklig påverkan','paaverkan']])],
-      ['Noterade naturvårdsarter', value('naturvardsarter') || 'Ej angivet'],
+      ['Noterade naturvårdsarter', compact ? value('naturvardsarter') : value('naturvardsarter') || 'Ej angivet'],
       ['Landskap', groups([['Anslutande värden','anslutande'],['Landskapsekologi','landskap'],['Gränsdragning','grans']])]
     ]
   };
+  if (compact) report.sections = report.sections.map(([title, rows]) => [title, Array.isArray(rows) ? rows.filter(([, text]) => isReportValueFilled(text)) : rows]).filter(([, rows]) => Array.isArray(rows) ? rows.length : isReportValueFilled(rows));
+  return report;
 }
 
-function reportHtml(includeImages, snapshot = protocolData()) {
-  const report = reportContent(snapshot);
+function reportHtml(includeImages, snapshot = protocolData(), compact = false) {
+  const report = reportContent(snapshot, compact);
   const esc = escapeHtml;
   const fields = rows => rows.map(([label, text]) => `<div class="report-field"><b>${esc(label)}</b><span>${esc(text)}</span></div>`).join('');
   const figures = includeImages ? Object.keys(imageLabels).filter(id => snapshot.images[id]).map(id => `<figure><img src="${snapshot.images[id]}" alt="${imageLabels[id]}"><figcaption>${imageLabels[id]}</figcaption></figure>`).join('') : '';
@@ -37,7 +45,7 @@ h1{font:600 38px Georgia,serif;margin-bottom:5px}h2{font:600 23px Georgia,serif;
 .report-field b{font-size:12px;text-transform:uppercase;color:#255d4b}.report-field span,p{white-space:pre-wrap}
 figure{display:inline-block;width:47%;vertical-align:top;margin:1%;break-inside:avoid}figure img{max-width:100%;max-height:380px;object-fit:contain}figcaption{font-size:12px;color:#68746d}
 @media(max-width:600px){.report-field{grid-template-columns:1fr}figure{width:100%;margin:12px 0}}@media print{body{margin:10mm;padding:0}}
-</style></head><body><p class="meta">FÄLTRAPPORT · OMRÅDESBESKRIVNING</p><h1>${esc(report.title)}</h1><p class="meta">${esc(report.meta)}</p><p class="meta">${esc(report.scale)}</p><h2>Sammanfattning</h2><p>${esc(report.summary)}</p>${report.sections.map(([title, rows]) => `<h2>${esc(title)}</h2>${typeof rows === 'string' ? `<p>${esc(rows)}</p>` : fields(rows)}`).join('')}<h2>Bilder</h2>${figures || (includeImages ? '<p>Inga bilder tillagda.</p>' : '<p>Rapporten exporterades utan bilder.</p>')}</body></html>`;
+</style></head><body><p class="meta">FÄLTRAPPORT · OMRÅDESBESKRIVNING</p><h1>${esc(report.title)}</h1>${report.meta ? `<p class="meta">${esc(report.meta)}</p>` : ''}<p class="meta">${esc(report.scale)}</p>${!compact || isReportValueFilled(report.summary) ? `<h2>Sammanfattning</h2><p>${esc(report.summary)}</p>` : ''}${report.sections.map(([title, rows]) => `<h2>${esc(title)}</h2>${typeof rows === 'string' ? `<p>${esc(rows)}</p>` : fields(rows)}`).join('')}${figures || !compact ? `<h2>Bilder</h2>${figures || (includeImages ? '<p>Inga bilder tillagda.</p>' : '<p>Rapporten exporterades utan bilder.</p>')}` : ''}</body></html>`;
 }
 
 async function prepareWordImages(snapshotImages) {
@@ -83,13 +91,13 @@ function buildWordDocument(report, preparedImages) {
   const children = [
     paragraph('FÄLTRAPPORT · OMRÅDESBESKRIVNING', {style:'ReportMeta'}),
     paragraph(report.title, {heading:HeadingLevel.TITLE}),
-    paragraph(report.meta, {style:'ReportMeta'}),
+    ...(report.meta ? [paragraph(report.meta, {style:'ReportMeta'})] : []),
     paragraph(report.scale, {style:'ReportMeta'}),
-    heading('Sammanfattning'), paragraph(report.summary)
+    ...(!report.compact || isReportValueFilled(report.summary) ? [heading('Sammanfattning'), paragraph(report.summary)] : [])
   ];
   for (const [title, rows] of report.sections) children.push(heading(title), typeof rows === 'string' ? paragraph(rows) : table(rows));
-  children.push(heading('Bilder'));
-  if (!preparedImages.length) children.push(paragraph('Inga bilder tillagda.'));
+  if (preparedImages.length || !report.compact) children.push(heading('Bilder'));
+  if (!preparedImages.length && !report.compact) children.push(paragraph('Inga bilder tillagda.'));
   for (const image of preparedImages) {
     children.push(new Paragraph({keepNext:true, children:[new ImageRun({type:'png', data:image.data, transformation:{width:image.width, height:image.height}, altText:{title:image.label, description:image.label, name:image.label}})]}));
     children.push(paragraph(image.label, {style:'ReportMeta'}));
@@ -107,8 +115,8 @@ function buildWordDocument(report, preparedImages) {
   });
 }
 
-async function wordReport(snapshot) {
+async function wordReport(snapshot, compact = false) {
   const preparedImages = await prepareWordImages(snapshot.images);
-  const document = buildWordDocument(reportContent(snapshot), preparedImages);
+  const document = buildWordDocument(reportContent(snapshot, compact), preparedImages);
   return docx.Packer.toBlob(document);
 }
