@@ -1,0 +1,145 @@
+{
+  "response_format_version": "1.0.0",
+  "response_id": "bce3d19a-7ba2-4d54-9a42-306c67a994a1",
+  "protocol_id": "field_report_area_description",
+  "protocol_version": "1.0.0",
+  "created_at": "2026-09-10T13:30:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "answers": {
+    "overview": {
+      "fields": {
+        "summary": "Fiktiv exempelinventering för att visa svarsformatet. Uppgifterna beskriver ingen verklig plats.",
+        "map_image": null
+      },
+      "groups": {}
+    },
+    "identity": {
+      "fields": {
+        "area_id": "EXEMPEL-01",
+        "area_name": "Exempelbeståndet",
+        "municipality": "",
+        "property_designation": null,
+        "area_hectares": 2.75,
+        "survey_date": "2026-09-10",
+        "surveyor": "Exempelinventerare",
+        "survey_method": [
+          "survey_method_options_overview"
+        ],
+        "survey_coverage": [
+          "survey_coverage_options_partial"
+        ],
+        "survey_limitations": []
+      },
+      "groups": {
+        "location": {
+          "fields": {
+            "polygon_text": "",
+            "center_coordinate_text": "Mittpunkt ej registrerad i detta fiktiva exempel."
+          },
+          "groups": {}
+        }
+      }
+    },
+    "tree_layer": {
+      "fields": {
+        "forest_type": [
+          "forest_type_options_conifer_mixed"
+        ],
+        "canopy_species": [
+          "canopy_species_options_pine",
+          "canopy_species_options_spruce"
+        ],
+        "dominant_age": 90,
+        "tree_layer_comment": "Äldre tallar bland yngre granar i den undersökta delen."
+      },
+      "groups": {}
+    },
+    "habitat_trees": {
+      "fields": {
+        "hollow_trees": "occurrence_options_absent"
+      },
+      "groups": {}
+    },
+    "deadwood": {
+      "fields": {},
+      "groups": {
+        "deadwood_lying": {
+          "fields": {
+            "deadwood_comment_lying": "Tallved i öppnare lägen; granved i en skuggig svacka."
+          },
+          "groups": {
+            "deadwood_lying_records": [
+              {
+                "record_id": "27c109c0-e981-4fc7-ad67-7f0669ebfda1",
+                "fields": {
+                  "wood_species": "wood_species_options_pine",
+                  "wood_occurrence": "occurrence_options_sparse",
+                  "wood_size": "wood_size_options_large",
+                  "wood_decay": "wood_decay_options_strong",
+                  "wood_character": [
+                    "wood_hollow",
+                    "wood_kelo_silver",
+                    "wood_resin_impregnated"
+                  ],
+                  "wood_character_other": "Längsgående sprickor.",
+                  "wood_microclimate": "wood_microclimate_options_sun_exposed"
+                },
+                "groups": {}
+              },
+              {
+                "record_id": "55ecb146-c4da-47bf-b868-4f1ca277dfe2",
+                "fields": {
+                  "wood_species": "wood_species_options_spruce",
+                  "wood_occurrence": "occurrence_options_isolated",
+                  "wood_size": "wood_size_options_medium",
+                  "wood_decay": "wood_decay_options_weak",
+                  "wood_character": [
+                    "wood_bark_beetle"
+                  ],
+                  "wood_microclimate": "wood_microclimate_options_shaded"
+                },
+                "groups": {}
+              }
+            ]
+          }
+        },
+        "deadwood_standing": {
+          "fields": {
+            "deadwood_comment_standing": "En stående död asp noterades i kanten av beståndet."
+          },
+          "groups": {
+            "deadwood_standing_records": [
+              {
+                "record_id": "6cb787db-26b3-47a3-b90d-d37c44d42fac",
+                "fields": {
+                  "wood_species": "wood_species_options_aspen",
+                  "wood_occurrence": "occurrence_options_isolated",
+                  "wood_character": [
+                    "wood_hollow"
+                  ]
+                },
+                "groups": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    "documentation": {
+      "fields": {
+        "extra_documentation_image": {
+          "resource_id": "example_pixel"
+        }
+      },
+      "groups": {}
+    }
+  },
+  "resources": {
+    "example_pixel": {
+      "media_type": "image/png",
+      "encoding": "base64",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNQjfUGAAF4AM5F1lvBAAAAAElFTkSuQmCC",
+      "filename": "example-pixel.png"
+    }
+  }
+}

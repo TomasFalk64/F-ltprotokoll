@@ -1,0 +1,1480 @@
+{
+  "format_version": "1.0.0",
+  "metadata": {
+    "protocol_id": "field_report_area_description",
+    "name": "Fältrapport – områdesbeskrivning",
+    "version": "1.0.0",
+    "description": "Informationsmodell för det befintliga formuläret för områdesbeskrivning. Alla registreringsfält är frivilliga.",
+    "language": "sv",
+    "created_at": "2026-09-10T13:00:44.845Z",
+    "updated_at": "2026-09-10T13:00:44.845Z"
+  },
+  "structure": [
+    {
+      "id": "overview",
+      "kind": "section",
+      "label": "Överblick",
+      "children": [
+        {
+          "field_ref": "summary"
+        },
+        {
+          "field_ref": "map_image"
+        }
+      ]
+    },
+    {
+      "id": "identity",
+      "kind": "section",
+      "label": "Grunduppgifter",
+      "children": [
+        {
+          "field_ref": "area_id"
+        },
+        {
+          "field_ref": "area_name"
+        },
+        {
+          "field_ref": "municipality"
+        },
+        {
+          "field_ref": "property_designation"
+        },
+        {
+          "field_ref": "area_hectares"
+        },
+        {
+          "field_ref": "survey_date"
+        },
+        {
+          "id": "location",
+          "kind": "group",
+          "label": "Områdets läge och avgränsning",
+          "repeatable": false,
+          "children": [
+            {
+              "field_ref": "polygon_text"
+            },
+            {
+              "field_ref": "center_coordinate_text"
+            }
+          ]
+        },
+        {
+          "field_ref": "surveyor"
+        },
+        {
+          "field_ref": "survey_method"
+        },
+        {
+          "field_ref": "survey_method_comment"
+        },
+        {
+          "field_ref": "survey_coverage"
+        },
+        {
+          "field_ref": "survey_limitations"
+        },
+        {
+          "field_ref": "survey_limitations_comment"
+        }
+      ]
+    },
+    {
+      "id": "tree_layer",
+      "kind": "section",
+      "label": "Trädskikt och skogstyp",
+      "children": [
+        {
+          "field_ref": "forest_type"
+        },
+        {
+          "field_ref": "canopy_species"
+        },
+        {
+          "field_ref": "canopy_species_other"
+        },
+        {
+          "field_ref": "special_forest_types"
+        },
+        {
+          "field_ref": "age_structure"
+        },
+        {
+          "field_ref": "canopy_layers"
+        },
+        {
+          "field_ref": "tree_layer_comment"
+        },
+        {
+          "field_ref": "dominant_age"
+        }
+      ]
+    },
+    {
+      "id": "habitat_trees",
+      "kind": "section",
+      "label": "Naturvärdesträd",
+      "children": [
+        {
+          "field_ref": "old_conifers"
+        },
+        {
+          "field_ref": "valuable_deciduous"
+        },
+        {
+          "field_ref": "large_trees"
+        },
+        {
+          "field_ref": "hollow_trees"
+        },
+        {
+          "field_ref": "damaged_trees"
+        },
+        {
+          "field_ref": "lichen_moss_trees"
+        },
+        {
+          "field_ref": "slow_growing_spruce"
+        },
+        {
+          "field_ref": "stand_structure"
+        }
+      ]
+    },
+    {
+      "id": "terrain",
+      "kind": "section",
+      "label": "Terräng & markförhållanden",
+      "children": [
+        {
+          "field_ref": "topography"
+        },
+        {
+          "field_ref": "soil_type"
+        },
+        {
+          "field_ref": "soil_moisture"
+        },
+        {
+          "field_ref": "hydrology"
+        },
+        {
+          "field_ref": "soil_chemistry"
+        },
+        {
+          "field_ref": "terrain_comment"
+        }
+      ]
+    },
+    {
+      "id": "ground_vegetation",
+      "kind": "section",
+      "label": "Markvegetation",
+      "children": [
+        {
+          "field_ref": "vegetation_type"
+        },
+        {
+          "field_ref": "special_structures"
+        },
+        {
+          "field_ref": "ground_vegetation_comment"
+        }
+      ]
+    },
+    {
+      "id": "deadwood",
+      "kind": "section",
+      "label": "Död ved",
+      "children": [
+        {
+          "id": "deadwood_lying",
+          "kind": "group",
+          "label": "Liggande död ved",
+          "repeatable": false,
+          "children": [
+            {
+              "id": "deadwood_lying_records",
+              "kind": "group",
+              "label": "Poster per trädslag",
+              "repeatable": true,
+              "children": [
+                {
+                  "field_ref": "wood_species"
+                },
+                {
+                  "field_ref": "wood_species_other"
+                },
+                {
+                  "field_ref": "wood_occurrence"
+                },
+                {
+                  "field_ref": "wood_size"
+                },
+                {
+                  "field_ref": "wood_decay"
+                },
+                {
+                  "field_ref": "wood_character"
+                },
+                {
+                  "field_ref": "wood_character_other"
+                },
+                {
+                  "field_ref": "wood_microclimate"
+                }
+              ],
+              "min_records": 0
+            },
+            {
+              "field_ref": "deadwood_comment_lying"
+            }
+          ]
+        },
+        {
+          "id": "deadwood_standing",
+          "kind": "group",
+          "label": "Stående död ved",
+          "repeatable": false,
+          "children": [
+            {
+              "id": "deadwood_standing_records",
+              "kind": "group",
+              "label": "Poster per trädslag",
+              "repeatable": true,
+              "children": [
+                {
+                  "field_ref": "wood_species"
+                },
+                {
+                  "field_ref": "wood_species_other"
+                },
+                {
+                  "field_ref": "wood_occurrence"
+                },
+                {
+                  "field_ref": "wood_size"
+                },
+                {
+                  "field_ref": "wood_decay"
+                },
+                {
+                  "field_ref": "wood_character"
+                },
+                {
+                  "field_ref": "wood_character_other"
+                },
+                {
+                  "field_ref": "wood_microclimate"
+                }
+              ],
+              "min_records": 0
+            },
+            {
+              "field_ref": "deadwood_comment_standing"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "processes_impact",
+      "kind": "section",
+      "label": "Processer, kontinuitet & påverkan",
+      "children": [
+        {
+          "field_ref": "natural_processes"
+        },
+        {
+          "field_ref": "human_impact"
+        }
+      ]
+    },
+    {
+      "id": "species_observations",
+      "kind": "section",
+      "label": "Noterade naturvårdsarter",
+      "children": [
+        {
+          "field_ref": "conservation_species_notes"
+        }
+      ]
+    },
+    {
+      "id": "landscape_context",
+      "kind": "section",
+      "label": "Angränsande naturvärden & landskapssamband",
+      "children": [
+        {
+          "field_ref": "adjacent_values"
+        },
+        {
+          "field_ref": "landscape_ecology"
+        },
+        {
+          "field_ref": "boundary_basis"
+        }
+      ]
+    },
+    {
+      "id": "documentation",
+      "kind": "section",
+      "label": "Bilder",
+      "children": [
+        {
+          "field_ref": "stand_overview_image"
+        },
+        {
+          "field_ref": "habitat_feature_image"
+        },
+        {
+          "field_ref": "extra_documentation_image"
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "id": "survey_method",
+      "label": "Inventeringsmetod",
+      "type": "multienum",
+      "required": false,
+      "option_set": "survey_method_options"
+    },
+    {
+      "id": "survey_coverage",
+      "label": "Inventeringens täckning",
+      "type": "multienum",
+      "required": false,
+      "option_set": "survey_coverage_options"
+    },
+    {
+      "id": "survey_limitations",
+      "label": "Begränsningar",
+      "type": "multienum",
+      "required": false,
+      "option_set": "survey_limitations_options"
+    },
+    {
+      "id": "forest_type",
+      "label": "Skogstyp",
+      "type": "multienum",
+      "required": false,
+      "option_set": "forest_type_options"
+    },
+    {
+      "id": "canopy_species",
+      "label": "Trädslag som förekommer",
+      "type": "multienum",
+      "required": false,
+      "option_set": "canopy_species_options"
+    },
+    {
+      "id": "special_forest_types",
+      "label": "Särskilda skogstyper",
+      "type": "multienum",
+      "required": false,
+      "option_set": "special_forest_types_options"
+    },
+    {
+      "id": "age_structure",
+      "label": "Åldersstruktur",
+      "type": "multienum",
+      "required": false,
+      "option_set": "age_structure_options"
+    },
+    {
+      "id": "canopy_layers",
+      "label": "Skiktning",
+      "type": "multienum",
+      "required": false,
+      "option_set": "canopy_layers_options"
+    },
+    {
+      "id": "stand_structure",
+      "label": "Beståndsstruktur",
+      "type": "multienum",
+      "required": false,
+      "option_set": "stand_structure_options"
+    },
+    {
+      "id": "topography",
+      "label": "Topografi",
+      "type": "multienum",
+      "required": false,
+      "option_set": "topography_options"
+    },
+    {
+      "id": "soil_type",
+      "label": "Jordart",
+      "type": "multienum",
+      "required": false,
+      "option_set": "soil_type_options"
+    },
+    {
+      "id": "soil_moisture",
+      "label": "Markfuktighet",
+      "type": "multienum",
+      "required": false,
+      "option_set": "soil_moisture_options"
+    },
+    {
+      "id": "hydrology",
+      "label": "Hydrologi",
+      "type": "multienum",
+      "required": false,
+      "option_set": "hydrology_options"
+    },
+    {
+      "id": "soil_chemistry",
+      "label": "Markkemi",
+      "type": "multienum",
+      "required": false,
+      "option_set": "soil_chemistry_options"
+    },
+    {
+      "id": "vegetation_type",
+      "label": "Vegetationstyp",
+      "type": "multienum",
+      "required": false,
+      "option_set": "vegetation_type_options"
+    },
+    {
+      "id": "special_structures",
+      "label": "Särskilda strukturer & småmiljöer",
+      "type": "multienum",
+      "required": false,
+      "option_set": "special_structures_options"
+    },
+    {
+      "id": "natural_processes",
+      "label": "Naturprocesser & kontinuitet",
+      "type": "multienum",
+      "required": false,
+      "option_set": "natural_processes_options"
+    },
+    {
+      "id": "human_impact",
+      "label": "Mänsklig påverkan",
+      "type": "multienum",
+      "required": false,
+      "option_set": "human_impact_options"
+    },
+    {
+      "id": "adjacent_values",
+      "label": "Anslutande värden",
+      "type": "multienum",
+      "required": false,
+      "option_set": "adjacent_values_options"
+    },
+    {
+      "id": "landscape_ecology",
+      "label": "Landskapsekologi",
+      "type": "multienum",
+      "required": false,
+      "option_set": "landscape_ecology_options"
+    },
+    {
+      "id": "boundary_basis",
+      "label": "Gränsdragning",
+      "type": "multienum",
+      "required": false,
+      "option_set": "boundary_basis_options"
+    },
+    {
+      "id": "summary",
+      "label": "Sammanfattning",
+      "type": "text",
+      "required": false,
+      "description": "Beskriv områdets viktigaste karaktärer och naturvärdesstrukturer. Ange om någon del inte har kunnat inventeras."
+    },
+    {
+      "id": "map_image",
+      "label": "Kartbild",
+      "type": "attachment",
+      "required": false,
+      "attachment_kind": "image",
+      "description": "Områdets läge och avgränsning."
+    },
+    {
+      "id": "area_id",
+      "label": "Delområde-ID",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "area_name",
+      "label": "Namn på delområde",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "municipality",
+      "label": "Kommun / Ort",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "property_designation",
+      "label": "Fastighetsbeteckning",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "area_hectares",
+      "label": "Areal",
+      "type": "decimal",
+      "required": false,
+      "unit": "ha",
+      "validation_refs": [
+        "area_precision"
+      ]
+    },
+    {
+      "id": "survey_date",
+      "label": "Inventeringsdatum",
+      "type": "date",
+      "required": false
+    },
+    {
+      "id": "polygon_text",
+      "label": "Polygon",
+      "type": "text",
+      "required": false,
+      "description": "Polygonbeskrivning som text, exempelvis JSON/GeoJSON. Ingen geografisk tolkning eller validering krävs."
+    },
+    {
+      "id": "center_coordinate_text",
+      "label": "Mittpunktskoordinat",
+      "type": "text",
+      "required": false,
+      "description": "Mittpunkten som text. Koordinatsystem kan anges i texten."
+    },
+    {
+      "id": "surveyor",
+      "label": "Inventerare",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "survey_method_comment",
+      "label": "Nivå/detaljeringsgrad, inriktning eller annan metod",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "survey_limitations_comment",
+      "label": "Beskriv begränsningar och delar som inte inventerats",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "canopy_species_other",
+      "label": "Övriga trädslag",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "tree_layer_comment",
+      "label": "Kommentar trädskikt",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "dominant_age",
+      "label": "Dominerande ålder",
+      "type": "integer",
+      "required": false,
+      "unit": "a",
+      "validation_refs": [
+        "nonnegative_number"
+      ]
+    },
+    {
+      "id": "old_conifers",
+      "label": "Gamla barrträd (plattkronor/grov bark etc.)",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "valuable_deciduous",
+      "label": "Särskilt värdefulla lövträd (asp, sälg, rönn, ek)",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "large_trees",
+      "label": "Grova träd (>50 cm dbh)",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "hollow_trees",
+      "label": "Hålträd/stamhåligheter",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "damaged_trees",
+      "label": "Skadade träd/brandljud/blottad ved",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "lichen_moss_trees",
+      "label": "Träd med riklig lav-/mossvegetation",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "slow_growing_spruce",
+      "label": "Kjolgranar/senvuxna undertryckta träd",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "terrain_comment",
+      "label": "Kommentar terräng",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "ground_vegetation_comment",
+      "label": "Kommentar markvegetation",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "wood_species",
+      "label": "Trädslag",
+      "type": "enum",
+      "required": false,
+      "option_set": "wood_species_options"
+    },
+    {
+      "id": "wood_species_other",
+      "label": "Ange trädslag",
+      "type": "text",
+      "required": false,
+      "applicable_when": "wood_is_other"
+    },
+    {
+      "id": "wood_occurrence",
+      "label": "Förekomst",
+      "type": "enum",
+      "required": false,
+      "option_set": "occurrence_options"
+    },
+    {
+      "id": "wood_size",
+      "label": "Grovlek",
+      "type": "enum",
+      "required": false,
+      "option_set": "wood_size_options"
+    },
+    {
+      "id": "wood_decay",
+      "label": "Nedbrytning",
+      "type": "enum",
+      "required": false,
+      "option_set": "wood_decay_options"
+    },
+    {
+      "id": "wood_character",
+      "label": "Vedkaraktär",
+      "type": "multienum",
+      "required": false,
+      "option_set": "wood_character_options"
+    },
+    {
+      "id": "wood_character_other",
+      "label": "Annan vedkaraktär",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "wood_microclimate",
+      "label": "Mikroklimat",
+      "type": "enum",
+      "required": false,
+      "option_set": "wood_microclimate_options"
+    },
+    {
+      "id": "deadwood_comment_lying",
+      "label": "Kommentar – liggande död ved",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "deadwood_comment_standing",
+      "label": "Kommentar – stående död ved",
+      "type": "text",
+      "required": false
+    },
+    {
+      "id": "conservation_species_notes",
+      "label": "Noterade naturvårdsarter",
+      "type": "text",
+      "required": false,
+      "description": "Rödlistade arter, signalarter och fridlysta arter."
+    },
+    {
+      "id": "stand_overview_image",
+      "label": "Översiktsbild av beståndet",
+      "type": "attachment",
+      "required": false,
+      "attachment_kind": "image"
+    },
+    {
+      "id": "habitat_feature_image",
+      "label": "Särskilt naturvärdeselement",
+      "type": "attachment",
+      "required": false,
+      "attachment_kind": "image"
+    },
+    {
+      "id": "extra_documentation_image",
+      "label": "Extra dokumentation",
+      "type": "attachment",
+      "required": false,
+      "attachment_kind": "image"
+    }
+  ],
+  "option_sets": [
+    {
+      "id": "survey_method_options",
+      "label": "Inventeringsmetod",
+      "options": [
+        {
+          "id": "survey_method_options_overview",
+          "label": "Översiktlig områdesbeskrivning"
+        },
+        {
+          "id": "survey_method_options_nvi",
+          "label": "Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad"
+        },
+        {
+          "id": "survey_method_options_targeted_species",
+          "label": "Riktad artinventering"
+        },
+        {
+          "id": "survey_method_options_other",
+          "label": "Annan"
+        }
+      ]
+    },
+    {
+      "id": "survey_coverage_options",
+      "label": "Inventeringens täckning",
+      "options": [
+        {
+          "id": "survey_coverage_options_whole",
+          "label": "Hela området genomgånget"
+        },
+        {
+          "id": "survey_coverage_options_most",
+          "label": "Större delen genomgången"
+        },
+        {
+          "id": "survey_coverage_options_partial",
+          "label": "Delar/stickprov"
+        }
+      ]
+    },
+    {
+      "id": "survey_limitations_options",
+      "label": "Begränsningar",
+      "options": [
+        {
+          "id": "survey_limitations_options_none",
+          "label": "Inga betydande"
+        },
+        {
+          "id": "survey_limitations_options_snow",
+          "label": "Snötäckt mark"
+        },
+        {
+          "id": "survey_limitations_options_dense_vegetation",
+          "label": "Tät vegetation/dålig sikt"
+        },
+        {
+          "id": "survey_limitations_options_difficult_terrain",
+          "label": "Svårframkomlig terräng"
+        },
+        {
+          "id": "survey_limitations_options_time",
+          "label": "Tidsbegränsning"
+        }
+      ]
+    },
+    {
+      "id": "forest_type_options",
+      "label": "Skogstyp",
+      "options": [
+        {
+          "id": "forest_type_options_spruce",
+          "label": "Grandominerad"
+        },
+        {
+          "id": "forest_type_options_pine",
+          "label": "Talldominerad"
+        },
+        {
+          "id": "forest_type_options_conifer_mixed",
+          "label": "Barrblandskog"
+        },
+        {
+          "id": "forest_type_options_conifer_deciduous",
+          "label": "Blandskog barr/löv"
+        },
+        {
+          "id": "forest_type_options_deciduous",
+          "label": "Lövdominerad"
+        }
+      ]
+    },
+    {
+      "id": "canopy_species_options",
+      "label": "Trädslag som förekommer",
+      "options": [
+        {
+          "id": "canopy_species_options_spruce",
+          "label": "Gran"
+        },
+        {
+          "id": "canopy_species_options_pine",
+          "label": "Tall"
+        },
+        {
+          "id": "canopy_species_options_birch",
+          "label": "Björk"
+        },
+        {
+          "id": "canopy_species_options_aspen",
+          "label": "Asp"
+        },
+        {
+          "id": "canopy_species_options_willow",
+          "label": "Sälg"
+        },
+        {
+          "id": "canopy_species_options_rowan",
+          "label": "Rönn"
+        },
+        {
+          "id": "canopy_species_options_oak",
+          "label": "Ek"
+        }
+      ]
+    },
+    {
+      "id": "special_forest_types_options",
+      "label": "Särskilda skogstyper",
+      "options": [
+        {
+          "id": "special_forest_types_options_rocky_pine",
+          "label": "Hällmarkstallskog"
+        },
+        {
+          "id": "special_forest_types_options_swamp",
+          "label": "Sumpskog"
+        },
+        {
+          "id": "special_forest_types_options_pine_bog",
+          "label": "Tallmosse"
+        },
+        {
+          "id": "special_forest_types_options_stream",
+          "label": "Bäckdrag"
+        },
+        {
+          "id": "special_forest_types_options_deciduous_hardwood",
+          "label": "Ädellöv"
+        }
+      ]
+    },
+    {
+      "id": "age_structure_options",
+      "label": "Åldersstruktur",
+      "options": [
+        {
+          "id": "age_structure_options_even",
+          "label": "Likåldrig"
+        },
+        {
+          "id": "age_structure_options_partial_variation",
+          "label": "Viss åldersspridning"
+        },
+        {
+          "id": "age_structure_options_multiple_generations",
+          "label": "Olikåldrig / flera trädgenerationer"
+        }
+      ]
+    },
+    {
+      "id": "canopy_layers_options",
+      "label": "Skiktning",
+      "options": [
+        {
+          "id": "canopy_layers_options_one",
+          "label": "Enskiktad"
+        },
+        {
+          "id": "canopy_layers_options_two",
+          "label": "Tvåskiktad"
+        },
+        {
+          "id": "canopy_layers_options_multiple",
+          "label": "Flerskiktad"
+        }
+      ]
+    },
+    {
+      "id": "stand_structure_options",
+      "label": "Beståndsstruktur",
+      "options": [
+        {
+          "id": "stand_structure_options_closed",
+          "label": "Slutet"
+        },
+        {
+          "id": "stand_structure_options_gaps",
+          "label": "Luckor/öppningar"
+        },
+        {
+          "id": "stand_structure_options_undergrowth",
+          "label": "Riklig underväxt"
+        }
+      ]
+    },
+    {
+      "id": "topography_options",
+      "label": "Topografi",
+      "options": [
+        {
+          "id": "topography_options_flat",
+          "label": "Plant"
+        },
+        {
+          "id": "topography_options_slope",
+          "label": "Sluttande"
+        },
+        {
+          "id": "topography_options_hilly",
+          "label": "Kuperat"
+        },
+        {
+          "id": "topography_options_cliffs",
+          "label": "Branter/Lodytor"
+        },
+        {
+          "id": "topography_options_boulders",
+          "label": "Blockmark"
+        }
+      ]
+    },
+    {
+      "id": "soil_type_options",
+      "label": "Jordart",
+      "options": [
+        {
+          "id": "soil_type_options_till",
+          "label": "Morän"
+        },
+        {
+          "id": "soil_type_options_sand_gravel",
+          "label": "Sand/Grus"
+        },
+        {
+          "id": "soil_type_options_peat",
+          "label": "Torv/Organisk"
+        },
+        {
+          "id": "soil_type_options_clay",
+          "label": "Lera"
+        },
+        {
+          "id": "soil_type_options_bedrock",
+          "label": "Berg i dagen"
+        }
+      ]
+    },
+    {
+      "id": "soil_moisture_options",
+      "label": "Markfuktighet",
+      "options": [
+        {
+          "id": "soil_moisture_options_dry",
+          "label": "Torr"
+        },
+        {
+          "id": "soil_moisture_options_mesic",
+          "label": "Frisk"
+        },
+        {
+          "id": "soil_moisture_options_moist",
+          "label": "Fuktig"
+        },
+        {
+          "id": "soil_moisture_options_wet",
+          "label": "Blöt"
+        }
+      ]
+    },
+    {
+      "id": "hydrology_options",
+      "label": "Hydrologi",
+      "options": [
+        {
+          "id": "hydrology_options_spring_seepage",
+          "label": "Källpåverkat/Översilning"
+        },
+        {
+          "id": "hydrology_options_stream_ditch",
+          "label": "Bäck/Dike"
+        },
+        {
+          "id": "hydrology_options_small_water",
+          "label": "Småvatten"
+        },
+        {
+          "id": "hydrology_options_swamp_strips",
+          "label": "Sumpskogsstråk"
+        }
+      ]
+    },
+    {
+      "id": "soil_chemistry_options",
+      "label": "Markkemi",
+      "options": [
+        {
+          "id": "soil_chemistry_options_calcareous_rich",
+          "label": "Kalkpåverkad / Rikt markvatten"
+        },
+        {
+          "id": "soil_chemistry_options_acidic_poor",
+          "label": "Surt / Näringsfattigt"
+        }
+      ]
+    },
+    {
+      "id": "vegetation_type_options",
+      "label": "Vegetationstyp",
+      "options": [
+        {
+          "id": "vegetation_type_options_dwarf_shrub",
+          "label": "Risdominerad (blåbär, lingon, ljung)"
+        },
+        {
+          "id": "vegetation_type_options_moss",
+          "label": "Mossdominerad (husmossa, väggmossa)"
+        },
+        {
+          "id": "vegetation_type_options_herb_grass",
+          "label": "Ört-/Gräsrik (högörter, lågörter)"
+        },
+        {
+          "id": "vegetation_type_options_fern",
+          "label": "Ormbunksrik"
+        },
+        {
+          "id": "vegetation_type_options_wetland",
+          "label": "Fuktvegetation (vitmossor, starr, fräken)"
+        },
+        {
+          "id": "vegetation_type_options_calcareous_indicators",
+          "label": "Kalkindikatorer"
+        }
+      ]
+    },
+    {
+      "id": "special_structures_options",
+      "label": "Särskilda strukturer & småmiljöer",
+      "options": [
+        {
+          "id": "special_structures_options_cliffs",
+          "label": "Lodytor / bergväggar"
+        },
+        {
+          "id": "special_structures_options_shaded_boulders",
+          "label": "Block / beskuggade block"
+        },
+        {
+          "id": "special_structures_options_rock_outcrops",
+          "label": "Hällmarker"
+        },
+        {
+          "id": "special_structures_options_springs",
+          "label": "Källmiljö / översilning"
+        },
+        {
+          "id": "special_structures_options_stream",
+          "label": "Bäck / fuktstråk"
+        },
+        {
+          "id": "special_structures_options_swamp",
+          "label": "Sumpskog"
+        },
+        {
+          "id": "special_structures_options_forest_wetland_transition",
+          "label": "Övergång skog–myr/våtmark"
+        },
+        {
+          "id": "special_structures_options_sun_exposed_wood",
+          "label": "Solexponerad ved / gamla träd"
+        }
+      ]
+    },
+    {
+      "id": "natural_processes_options",
+      "label": "Naturprocesser & kontinuitet",
+      "options": [
+        {
+          "id": "natural_processes_options_tree_continuity",
+          "label": "Lång trädkontinuitet"
+        },
+        {
+          "id": "natural_processes_options_deadwood_continuity",
+          "label": "Kontinuerlig tillförsel av död ved"
+        },
+        {
+          "id": "natural_processes_options_self_thinning",
+          "label": "Naturlig självgallring / Luckdynamik"
+        },
+        {
+          "id": "natural_processes_options_windthrow",
+          "label": "Rotvältor / Vindfällen"
+        },
+        {
+          "id": "natural_processes_options_fire",
+          "label": "Brandspår (kolade stubbar/träd)"
+        },
+        {
+          "id": "natural_processes_options_flooding",
+          "label": "Naturlig översvämning / vattenståndsvariation"
+        }
+      ]
+    },
+    {
+      "id": "human_impact_options",
+      "label": "Mänsklig påverkan",
+      "options": [
+        {
+          "id": "human_impact_options_old_stumps",
+          "label": "Gamla stubbar"
+        },
+        {
+          "id": "human_impact_options_fresh_stumps",
+          "label": "Färska stubbar"
+        },
+        {
+          "id": "human_impact_options_thinning",
+          "label": "Gallrat / Röjt"
+        },
+        {
+          "id": "human_impact_options_logging_tracks",
+          "label": "Stickvägar / Körskador i mark"
+        },
+        {
+          "id": "human_impact_options_drainage",
+          "label": "Dikning (aktiva / igensatta dikesdrag)"
+        },
+        {
+          "id": "human_impact_options_planting",
+          "label": "Plantering / Markberett"
+        },
+        {
+          "id": "human_impact_options_infrastructure",
+          "label": "Vägar / kraftledningsgata / annan exploatering"
+        }
+      ]
+    },
+    {
+      "id": "adjacent_values_options",
+      "label": "Anslutande värden",
+      "options": [
+        {
+          "id": "adjacent_values_options_protected",
+          "label": "Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)"
+        },
+        {
+          "id": "adjacent_values_options_old_forest",
+          "label": "Äldre skog gränsar till området"
+        }
+      ]
+    },
+    {
+      "id": "landscape_ecology_options",
+      "label": "Landskapsekologi",
+      "options": [
+        {
+          "id": "landscape_ecology_options_continuous_value_area",
+          "label": "Ingår i ett större sammanhängande värdeområde"
+        },
+        {
+          "id": "landscape_ecology_options_corridor",
+          "label": "Ekologisk korridor / Bäckdrag"
+        }
+      ]
+    },
+    {
+      "id": "boundary_basis_options",
+      "label": "Gränsdragning",
+      "options": [
+        {
+          "id": "boundary_basis_options_ecological",
+          "label": "Ekologisk gräns"
+        },
+        {
+          "id": "boundary_basis_options_administrative",
+          "label": "Administrativ gräns (fastighetsgräns/hyggeskant)"
+        }
+      ]
+    },
+    {
+      "id": "occurrence_options",
+      "label": "Förekomst",
+      "options": [
+        {
+          "id": "occurrence_options_absent",
+          "label": "Saknas",
+          "code": 0
+        },
+        {
+          "id": "occurrence_options_isolated",
+          "label": "Enstaka",
+          "code": 1
+        },
+        {
+          "id": "occurrence_options_sparse",
+          "label": "Sparsamt",
+          "code": 2
+        },
+        {
+          "id": "occurrence_options_moderate",
+          "label": "Måttligt",
+          "code": 3
+        },
+        {
+          "id": "occurrence_options_abundant",
+          "label": "Rikligt",
+          "code": 4
+        }
+      ]
+    },
+    {
+      "id": "wood_species_options",
+      "label": "Trädslag",
+      "options": [
+        {
+          "id": "wood_species_options_spruce",
+          "label": "Gran"
+        },
+        {
+          "id": "wood_species_options_pine",
+          "label": "Tall"
+        },
+        {
+          "id": "wood_species_options_birch",
+          "label": "Björk"
+        },
+        {
+          "id": "wood_species_options_aspen",
+          "label": "Asp"
+        },
+        {
+          "id": "wood_species_options_willow",
+          "label": "Sälg"
+        },
+        {
+          "id": "wood_species_options_rowan",
+          "label": "Rönn"
+        },
+        {
+          "id": "wood_species_options_oak",
+          "label": "Ek"
+        },
+        {
+          "id": "wood_species_options_alder",
+          "label": "Al"
+        },
+        {
+          "id": "wood_species_options_beech",
+          "label": "Bok"
+        },
+        {
+          "id": "wood_species_options_ash",
+          "label": "Ask"
+        },
+        {
+          "id": "wood_species_options_elm",
+          "label": "Alm"
+        },
+        {
+          "id": "wood_species_options_lime",
+          "label": "Lind"
+        },
+        {
+          "id": "wood_species_options_maple",
+          "label": "Lönn"
+        },
+        {
+          "id": "wood_species_options_other",
+          "label": "Annat"
+        }
+      ]
+    },
+    {
+      "id": "wood_size_options",
+      "label": "Grovlek",
+      "options": [
+        {
+          "id": "wood_size_options_small",
+          "label": "Klen <20 cm"
+        },
+        {
+          "id": "wood_size_options_medium",
+          "label": "Medel 20–40 cm"
+        },
+        {
+          "id": "wood_size_options_large",
+          "label": "Grov >40 cm"
+        },
+        {
+          "id": "wood_size_options_mixed",
+          "label": "Blandade dimensioner"
+        }
+      ]
+    },
+    {
+      "id": "wood_decay_options",
+      "label": "Nedbrytning",
+      "options": [
+        {
+          "id": "wood_decay_options_recent",
+          "label": "Nyligen död"
+        },
+        {
+          "id": "wood_decay_options_weak",
+          "label": "Svagt nedbruten"
+        },
+        {
+          "id": "wood_decay_options_moderate",
+          "label": "Måttligt nedbruten"
+        },
+        {
+          "id": "wood_decay_options_strong",
+          "label": "Starkt nedbruten"
+        },
+        {
+          "id": "wood_decay_options_very_strong",
+          "label": "Mycket starkt nedbruten"
+        }
+      ]
+    },
+    {
+      "id": "wood_microclimate_options",
+      "label": "Mikroklimat",
+      "options": [
+        {
+          "id": "wood_microclimate_options_sun_exposed",
+          "label": "Solexponerad"
+        },
+        {
+          "id": "wood_microclimate_options_shaded",
+          "label": "Beskuggad"
+        }
+      ]
+    },
+    {
+      "id": "wood_character_options",
+      "label": "Vedkaraktär",
+      "options": [
+        {
+          "id": "wood_hollow",
+          "label": "Hålig"
+        },
+        {
+          "id": "wood_fire_affected",
+          "label": "Brandpräglad"
+        },
+        {
+          "id": "wood_kelo_silver",
+          "label": "Keloved/silverved",
+          "applicable_when": "wood_is_pine"
+        },
+        {
+          "id": "wood_resin_impregnated",
+          "label": "Kådindränkt",
+          "applicable_when": "wood_is_pine"
+        },
+        {
+          "id": "wood_blister_rust",
+          "label": "Törskatepräglad",
+          "applicable_when": "wood_is_pine"
+        },
+        {
+          "id": "wood_bark_beetle",
+          "label": "Barkborrepräglad",
+          "applicable_when": "wood_is_spruce"
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "wood_is_pine",
+      "expression": {
+        "op": "equals",
+        "source": {
+          "scope": "record",
+          "field_id": "wood_species"
+        },
+        "value": "wood_species_options_pine"
+      }
+    },
+    {
+      "id": "wood_is_spruce",
+      "expression": {
+        "op": "equals",
+        "source": {
+          "scope": "record",
+          "field_id": "wood_species"
+        },
+        "value": "wood_species_options_spruce"
+      }
+    },
+    {
+      "id": "wood_is_other",
+      "expression": {
+        "op": "equals",
+        "source": {
+          "scope": "record",
+          "field_id": "wood_species"
+        },
+        "value": "wood_species_options_other"
+      }
+    }
+  ],
+  "validation": [
+    {
+      "id": "nonnegative_number",
+      "kind": "number",
+      "minimum": 0
+    },
+    {
+      "id": "area_precision",
+      "kind": "number",
+      "minimum": 0,
+      "multiple_of": 0.01
+    }
+  ]
+}
