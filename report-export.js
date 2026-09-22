@@ -18,15 +18,16 @@ function reportContent(snapshot, compact = false) {
     summary: compact ? value('sammanfattning') : value('sammanfattning') || 'Ej angiven',
     scale: 'Förekomstskala: 0 = saknas, 1 = enstaka, 2 = sparsamt, 3 = måttligt, 4 = rikligt. Tomma fält betyder ej angivet/ej bedömt.',
     sections: [
-      ['Grunduppgifter', [...basic.map(([label, name]) => field(label, value(name))), ...groups([['Inventeringsmetod','metod'],['Inventeringens täckning','tackning'],['Begränsningar','begransning']])]],
-      ['Trädskikt och skogstyp', [...groups([['Skogstyp','skogstyp'],['Trädslag','tradslag'],['Särskilda skogstyper','sarskildSkog'],['Åldersstruktur','aldersstruktur'],['Skiktning','skiktning']]), field('Kommentar trädskikt', value('alderDiameter')), field('Dominerande ålder (år)', value('dominerandeAlder')), ...groups([['Beståndsstruktur','bestandsstruktur']])]],
-      ['Naturvärdesträd', nvt.map((label, i) => field(label, value(`nvt${i}`)))],
-      ['Terräng & markförhållanden', [...groups(markGroups), field('Kommentar terräng', value('terrangKommentar'))]],
-      ['Markvegetation', [...groups([['Vegetationstyp','vegetation'],['Särskilda strukturer','strukturer']]), field('Kommentar markvegetation', value('strukturerDetalj'))]],
+      ['Grunduppgifter', [...basic.map(([label, name]) => field(label, value(name))), ...groups([['Inventeringsmetod','metod'],['Inventeringens täckning','tackning'],['Begränsningar','begransning']]), field('Svamptillgång', value('svamptillgang'))]],
+      ['Trädskikt och skogstyp', [...groups([['Skogstyp','skogstyp'],['Trädslag','tradslag'],['Särskilda skogstyper','sarskildSkog'],['Åldersstruktur','aldersstruktur'],['Skiktning','skiktning'],['Beståndsstruktur','bestandsstruktur']]), field('Kommentar trädskikt', value('alderDiameter')), field('Dominerande ålder (år)', value('dominerandeAlder'))]],
+      ['Markvegetation', [...groups([['Vegetationstyp','vegetation']]), field('Markskikt (mossor och lavar) – Täckningsgrad', value('markskiktTackning')), field('Markskikt (mossor och lavar) – Markskiktstyp', value('markskiktTyp')), field('Markskikt (mossor och lavar) – Dominerande arter', value('markskiktArter')), field('Markskikt (mossor och lavar) – Struktur & funktion', value('markskiktStruktur')), field('Fältskikt (rikörter) – Täckningsgrad', value('faltskiktTackning')), field('Fältskikt (rikörter) – Fältskiktstyp', value('faltskiktTyp')), field('Fältskikt (rikörter) – Dominerande arter', value('faltskiktArter')), field('Fältskikt (rikörter) – Struktur & funktion', value('faltskiktStruktur')), field('Buskskikt (1–5 m) – Täckningsgrad', value('buskskiktTackning')), field('Buskskikt (1–5 m) – Dominerande arter', value('buskskiktArter')), field('Buskskikt (1–5 m) – Struktur & funktion', value('buskskiktStruktur'))]],
+      ['Naturvärdesträd', [...nvt.map((label, i) => field(label, value(`nvt${i}`))), field('Kommentar naturvärdesträd', value('naturvardestradKommentar'))]],
+      ['Terräng & markförhållanden', [...groups(markGroups), field('Kommentar terräng', value('terrangKommentar')), ...groups([['Särskilda strukturer & småmiljöer','strukturer']])]],
       ['Död ved', woodReportFields(snapshot.fields, compact)],
-      ['Processer & påverkan', groups([['Naturprocesser','processer'],['Mänsklig påverkan','paaverkan']])],
+      ['Processer & påverkan', [...groups([['Naturprocesser','processer'],['Mänsklig påverkan','paaverkan'],['Skador','skador']]), field('Pågående markanvändning', value('markanvandning'))]],
       ['Noterade naturvårdsarter', compact ? value('naturvardsarter') : value('naturvardsarter') || 'Ej angivet'],
-      ['Landskap', groups([['Anslutande värden','anslutande'],['Landskapsekologi','landskap'],['Gränsdragning','grans']])]
+      ['Kollektnoteringar / DNA', compact ? value('kollektnoteringarDna') : value('kollektnoteringarDna') || 'Ej angivet'],
+      ['Landskap', [...groups([['Anslutande värden','anslutande'],['Landskapsekologi','landskap'],['Gränsdragning','grans']]), field('Kommentar landskap', value('landskapKommentar'))]]
     ]
   };
   if (compact) report.sections = report.sections.map(([title, rows]) => [title, Array.isArray(rows) ? rows.filter(([, text]) => isReportValueFilled(text)) : rows]).filter(([, rows]) => Array.isArray(rows) ? rows.length : isReportValueFilled(rows));

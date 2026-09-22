@@ -8,10 +8,26 @@ function normalizeFields(entries) {
   // Preserve the former "Annat" choice in the renamed comment field.
   const hadOther = entries.some(([name, value]) => name === 'strukturer' && value === 'Annat');
   const fields = entries.filter(([name, value]) => name !== 'strukturer' || value !== 'Annat').map(entry => [...entry]);
+  // The former quality choices have no exact equivalent on the occurrence scale.
+  const legacyMushrooms = fields.find(([name, value]) => name === 'svamptillgang' && ['God', 'Viss', 'Dålig'].includes(value));
+  if (legacyMushrooms) {
+    const note = `Svamptillgång (tidigare skala): ${legacyMushrooms[1]}`;
+    const comment = fields.find(([name]) => name === 'begransningDetalj');
+    if (comment) comment[1] = [comment[1], note].filter(Boolean).join('\n');
+    else fields.push(['begransningDetalj', note]);
+    legacyMushrooms[1] = '';
+  }
   if (hadOther) {
     const comment = fields.find(([name]) => name === 'strukturerDetalj');
     if (comment) comment[1] = comment[1] ? `Annat: ${comment[1]}` : 'Annat';
     else fields.push(['strukturerDetalj', 'Annat']);
+  }
+  // Preserve comments from the removed structures field in the terrain comment.
+  const structureComment = fields.find(([name]) => name === 'strukturerDetalj')?.[1];
+  if (structureComment) {
+    const terrainComment = fields.find(([name]) => name === 'terrangKommentar');
+    if (terrainComment) terrainComment[1] = [terrainComment[1], structureComment].filter(Boolean).join('\n');
+    else fields.push(['terrangKommentar', structureComment]);
   }
   // Keep systems from older protocols as optional text instead of dropping them.
   for (const [legacyName, textName] of [['polygonCrs','polygonGeojson'],['centerCrs','centerCoordinate']]) {
@@ -21,16 +37,16 @@ function normalizeFields(entries) {
     if (text && !text[1].includes(system)) text[1] += `${textName === 'polygonGeojson' ? '\n' : ' '}Koordinatsystem: ${system}`;
     else if (!text) fields.push([textName, `Koordinatsystem: ${system}`]);
   }
-  return migrateWood(fields.filter(([name]) => !['polygonCrs','centerCrs'].includes(name)));
+  return migrateWood(fields.filter(([name]) => !['polygonCrs','centerCrs','strukturerDetalj'].includes(name)));
 }
-const fieldNames = ['metod','tackning','begransning','skogstyp','tradslag','sarskildSkog','aldersstruktur','skiktning','bestandsstruktur','topografi','jordart','markfuktighet','hydrologi','markkemi','vegetation','strukturer','processer','paaverkan','anslutande','landskap','grans'];
+const fieldNames = ['metod','tackning','begransning','skogstyp','tradslag','sarskildSkog','aldersstruktur','skiktning','bestandsstruktur','topografi','jordart','markfuktighet','hydrologi','markkemi','vegetation','strukturer','processer','paaverkan','skador','anslutande','landskap','grans'];
 const options = {
-  metod:['Översiktlig områdesbeskrivning','Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad','Riktad artinventering','Annan'], tackning:['Hela området genomgånget','Större delen genomgången','Delar/stickprov'], begransning:['Inga betydande','Snötäckt mark','Tät vegetation/dålig sikt','Svårframkomlig terräng','Tidsbegränsning'], skogstyp:['Grandominerad','Talldominerad','Barrblandskog','Blandskog barr/löv','Lövdominerad'], tradslag:['Gran','Tall','Björk','Asp','Sälg','Rönn','Ek'], sarskildSkog:['Hällmarkstallskog','Sumpskog','Tallmosse','Bäckdrag','Ädellöv'], aldersstruktur:['Likåldrig','Viss åldersspridning','Olikåldrig / flera trädgenerationer'], skiktning:['Enskiktad','Tvåskiktad','Flerskiktad'], bestandsstruktur:['Slutet','Luckor/öppningar','Riklig underväxt'], topografi:['Plant','Sluttande','Kuperat','Branter/Lodytor','Blockmark'], jordart:['Morän','Sand/Grus','Torv/Organisk','Lera','Berg i dagen'], markfuktighet:['Torr','Frisk','Fuktig','Blöt'], hydrologi:['Källpåverkat/Översilning','Bäck/Dike','Småvatten','Sumpskogsstråk'], markkemi:['Kalkpåverkad / Rikt markvatten','Surt / Näringsfattigt'], vegetation:['Risdominerad (blåbär, lingon, ljung)','Mossdominerad (husmossa, väggmossa)','Ört-/Gräsrik (högörter, lågörter)','Ormbunksrik','Fuktvegetation (vitmossor, starr, fräken)','Kalkindikatorer'], strukturer:['Lodytor / bergväggar','Block / beskuggade block','Hällmarker','Källmiljö / översilning','Bäck / fuktstråk','Sumpskog','Övergång skog–myr/våtmark','Solexponerad ved / gamla träd'], processer:['Lång trädkontinuitet','Kontinuerlig tillförsel av död ved','Naturlig självgallring / Luckdynamik','Rotvältor / Vindfällen','Brandspår (kolade stubbar/träd)','Naturlig översvämning / vattenståndsvariation'], paaverkan:['Gamla stubbar','Färska stubbar','Gallrat / Röjt','Stickvägar / Körskador i mark','Dikning (aktiva / igensatta dikesdrag)','Plantering / Markberett','Vägar / kraftledningsgata / annan exploatering'], anslutande:['Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)','Äldre skog gränsar till området'], landskap:['Ingår i ett större sammanhängande värdeområde','Ekologisk korridor / Bäckdrag'], grans:['Ekologisk gräns','Administrativ gräns (fastighetsgräns/hyggeskant)']
+  metod:['Översiktlig områdesbeskrivning','Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad','Riktad artinventering','Annan'], tackning:['Hela området genomgånget','Större delen genomgången','Delar/stickprov'], begransning:['Inga betydande','Snötäckt mark','Tät vegetation/dålig sikt','Svårframkomlig terräng','Tidsbegränsning'], skogstyp:['Grandominerad','Talldominerad','Barrblandskog','Blandskog barr/löv','Lövdominerad'], tradslag:['Gran','Tall','Björk','Asp','Sälg','Rönn','Ek'], sarskildSkog:['Hällmarkstallskog','Sumpskog','Tallmosse','Bäckdrag','Ädellöv'], aldersstruktur:['Likåldrig','Viss åldersspridning','Olikåldrig / flera trädgenerationer'], skiktning:['Enskiktad','Tvåskiktad','Flerskiktad'], bestandsstruktur:['Slutet','Luckor/öppningar','Riklig underväxt'], topografi:['Plant','Sluttande','Kuperat','Branter/Lodytor','Blockmark'], jordart:['Morän','Sand/Grus','Torv/Organisk','Lera','Berg i dagen'], markfuktighet:['Torr','Frisk','Fuktig','Blöt'], hydrologi:['Källpåverkat/Översilning','Bäck/Dike','Småvatten','Sumpskogsstråk'], markkemi:['Kalkpåverkad / Rikt markvatten','Surt / Näringsfattigt'], vegetation:['Risdominerad (blåbär, lingon, ljung)','Mossdominerad (husmossa, väggmossa)','Ört-/Gräsrik (högörter, lågörter)','Ormbunksrik','Fuktvegetation (vitmossor, starr, fräken)','Kalkindikatorer'], strukturer:['Lodytor / bergväggar','Block / beskuggade block','Hällmarker','Källmiljö / översilning','Bäck / fuktstråk','Sumpskog','Övergång skog–myr/våtmark','Solexponerad ved / gamla träd'], processer:['Lång trädkontinuitet','Kontinuerlig tillförsel av död ved','Naturlig självgallring / Luckdynamik','Rotvältor / Vindfällen','Brandspår (kolade stubbar/träd)','Naturlig översvämning / vattenståndsvariation'], skador:['Granbarkborre','Stormskador','Vildsvinsbök'], paaverkan:['Gärdsgårdar','Gamla stubbar','Färska stubbar','Gallrat / Röjt','Stickvägar / Körskador i mark','Dikning (aktiva / igensatta dikesdrag)','Plantering / Markberett','Vägar / kraftledningsgata / annan exploatering'], anslutande:['Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)','Äldre skog gränsar till området'], landskap:['Ingår i ett större sammanhängande värdeområde','Ekologisk korridor / Bäckdrag'], grans:['Ekologisk gräns','Administrativ gräns (fastighetsgräns/hyggeskant)']
 };
 const nvt = ['Gamla barrträd (plattkronor/grov bark etc.)','Särskilt värdefulla lövträd (asp, sälg, rönn, ek)','Grova träd (>50 cm dbh)','Hålträd/stamhåligheter','Skadade träd/brandljud/blottad ved','Träd med riklig lav-/mossvegetation','Kjolgranar/senvuxna undertryckta träd'];
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const scale = ['0 – saknas', '1 – enstaka', '2 – sparsamt', '3 – måttligt', '4 – rikligt'];
-const details = {metod:'Nivå/detaljeringsgrad, inriktning eller annan metod', begransning:'Beskriv begränsningar och delar som inte inventerats', tradslag:'Övriga trädslag', strukturer:'Kommentar markvegetation'};
+const details = {metod:'Nivå/detaljeringsgrad, inriktning eller annan metod', tradslag:'Övriga trädslag'};
 function choices(name, values) {
   return values.map(value => `<label class="choice"><input type="checkbox" name="${name}" value="${escapeHtml(value)}"><span>${escapeHtml(value)}</span></label>`).join('') + (details[name] ? `<label class="choice-detail">${details[name]}${name === 'strukturer' ? `<textarea name="${name}Detalj" rows="3"></textarea>` : `<input name="${name}Detalj">`}</label>` : '');
 }
@@ -40,6 +56,7 @@ function select(name, label) {
 const markGroups = [['Topografi','topografi'],['Jordart','jordart'],['Markfuktighet','markfuktighet'],['Hydrologi','hydrologi'],['Markkemi','markkemi']];
 const tokens = Object.fromEntries(fieldNames.map(name => [name.toUpperCase(), choices(name, options[name])]));
 tokens.BEGRANSNINGAR = tokens.BEGRANSNING;
+tokens.SVAMPTILLGANG = `<div class="mushroom-choices" role="group" aria-labelledby="svamptillgangHeading">${scale.map((label, value) => `<button class="choice" type="button" data-mushroom-value="${value}" aria-pressed="false">${label}</button>`).join('')}</div>${select('svamptillgang', 'Svamptillgång').replace('<select ', '<select hidden ')}`;
 tokens.NVT = nvt.map((item, i) => `<div class="score-row"><label for="nvt${i}">${escapeHtml(item)}</label>${select(`nvt${i}`, item)}</div>`).join('');
 tokens.MARKBLOCK = markGroups.map(([title, name]) => `<div class="subsection"><h3>${title}</h3><div class="choice-grid ${name === 'markkemi' ? 'three' : 'four'}">${choices(name, options[name])}</div></div>`).join('');
 tokens.DODVED = woodGroups.map(([id, title]) => woodGroupHtml(id, title)).join('');
@@ -58,6 +75,10 @@ document.querySelectorAll('.image-input').forEach(input => {
 });
 
 function updateProgress() {
+  const mushroomAvailability = new FormData(form).get('svamptillgang') || '';
+  document.querySelectorAll('[data-mushroom-value]').forEach(button => {
+    button.setAttribute('aria-pressed', String(button.dataset.mushroomValue === mushroomAvailability));
+  });
   const areaName = new FormData(form).get('namn')?.trim() || '';
   const areaLabel = document.querySelector('#topbarArea');
   areaLabel.textContent = areaName;
@@ -118,6 +139,11 @@ function restoreDraft() {
 form.addEventListener('submit', event => event.preventDefault());
 form.addEventListener('input', saveDraft);
 form.addEventListener('change', saveDraft);
+document.querySelectorAll('[data-mushroom-value]').forEach(button => button.addEventListener('click', () => {
+  const control = document.querySelector('[name="svamptillgang"]');
+  control.value = control.value === button.dataset.mushroomValue ? '' : button.dataset.mushroomValue;
+  saveDraft();
+}));
 document.querySelector('#saveButton').addEventListener('click', () => openSaveDialog());
 document.querySelector('#clearButton').addEventListener('click', () => {
   if (!confirm('Rensa alla uppgifter och bilder i utkastet? Nedladdade rapportfiler påverkas inte.')) return;

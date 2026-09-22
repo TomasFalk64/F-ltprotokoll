@@ -50,6 +50,49 @@ function setup(saved = {}, blocked = false) {
   return {context, form, controls, storage, node, downloads, confirmation, run: code => vm.runInContext(code, context), field: name => controls.find(el => el.name === name)};
 }
 const app = setup();
+for (const oldValue of ['God', 'Viss', 'Dålig']) {
+  const legacy = setup({'faltrapport-draft': JSON.stringify([['svamptillgang', oldValue], ['begransningDetalj', 'Egen notering']])});
+  assert.equal(legacy.field('svamptillgang').value, '');
+  assert.equal(legacy.field('begransningDetalj').value, `Egen notering\nSvamptillgång (tidigare skala): ${oldValue}`);
+  legacy.context.oldMushrooms = {format:'faltrapport', version:1, fields:[['svamptillgang', oldValue]], images:{}};
+  legacy.run('applyProtocol(validateProtocol(oldMushrooms))');
+  assert.equal(legacy.field('begransningDetalj').value, `Svamptillgång (tidigare skala): ${oldValue}`);
+}
+for (const level of ['', '0', '1', '2', '3', '4']) {
+  app.field('svamptillgang').value = level;
+  app.run('applyProtocol(validateProtocol(protocolData()))');
+  assert.equal(app.field('svamptillgang').value, level);
+}
+app.field('svamptillgang').value = '';
+const vegetationFields = [
+  ['svamptillgang', '0'], ['markanvandning', 'Naturvårdsbete'],
+  ['naturvardestradKommentar', 'Gamla sälgar vid bäcken'], ['landskapKommentar', 'Kontakt med äldre skog'],
+  ['markskiktTackning', 'Låg'], ['markskiktTyp', 'Friskmosstyp'],
+  ['markskiktArter', 'Husmossa'], ['markskiktStruktur', 'Sammanhängande mosstäcke'],
+  ['faltskiktTackning', 'Måttlig'], ['faltskiktTyp', 'Blåbärstyp'],
+  ['faltskiktArter', 'Blåbär'], ['faltskiktStruktur', 'Luckor med örter'],
+  ['buskskiktTackning', 'Hög'], ['buskskiktArter', 'Sälg'],
+  ['buskskiktStruktur', 'Tät underväxt'], ['paaverkan', 'Gärdsgårdar'],
+  ['skador', 'Granbarkborre'], ['skador', 'Stormskador'], ['skador', 'Vildsvinsbök'],
+  ['strukturer', 'Block / beskuggade block'], ['strukturerDetalj', 'Mossiga block']
+];
+const vegetationApp = setup({'faltrapport-draft': JSON.stringify(vegetationFields)});
+const vegetationCopy = setup();
+vegetationCopy.context.savedVegetation = JSON.parse(vegetationApp.run('JSON.stringify(protocolData())'));
+vegetationCopy.run('applyProtocol(validateProtocol(savedVegetation))');
+assert.equal(vegetationCopy.run('protocolSignature()'), vegetationApp.run('protocolSignature()'));
+const vegetationReport = vegetationCopy.run('reportContent(protocolData(), true)');
+const vegetationRows = vegetationReport.sections.flatMap(([, rows]) => Array.isArray(rows) ? rows : []);
+for (const [name, value] of vegetationFields) {
+  assert(vegetationRows.some(([, text]) => text.includes(value)), `${name} survives report export`);
+}
+const headings = [...vegetationApp.form.innerHTML.matchAll(/<h2[^>]*>(.*?)<\/h2>/g)].map(match => match[1]);
+assert.equal(headings[headings.indexOf('Trädskikt och skogstyp') + 1], 'Markvegetation');
+const terrain = vegetationReport.sections.find(([title]) => title === 'Terräng & markförhållanden')[1];
+assert(terrain.some(([label, text]) => label.includes('Särskilda strukturer') && text.includes('Block')));
+assert(terrain.some(([, text]) => text === 'Mossiga block'));
+assert.equal((html.match(/class="info-button"/g) || []).length, 4);
+console.log('PASS: vegetation fields, damage choices, draft/JSON round trip, report values and section placement.');
 for (const id of ['saveJson', 'saveWord', 'saveHtml', 'saveCompact']) assert(new RegExp(`<input[^>]*id="${id}"[^>]*checked`).test(html), `${id} is selected by default`);
 const compactApp = setup();
 compactApp.context.compactSnapshot = {fields:[['namn','Testområde'], ['kommun',null], ['fastighet',[]], ['areal',0], ['datum',''], ['inventerare','Ej angivet'], ['alderDiameter','Ej bedömt'], ['nvt0','0']], images:{}};
@@ -74,7 +117,7 @@ app.field('ved_liggande').value = app.run("JSON.stringify([{...emptyWoodRow(), t
 app.field('metodDetalj').value = 'Detaljer <test>';
 app.field('alderDiameter').value = 'Kommentar om träden';
 app.field('terrangKommentar').value = 'Brant i norr\nBlockig mark';
-app.field('strukturerDetalj').value = 'Kommentar om vegetationen';
+app.field('terrangKommentar').value += '\nKommentar om vegetationen';
 app.field('ved_liggande_kommentar').value = 'Kommentar om veden';
 app.field('naturvardsarter').value = 'Artobservation på egen rad';
 app.field('polygonGeojson').value = JSON.stringify({type:'Polygon',coordinates:[[[18,59],[19,59],[19,60],[18,59]]]});
@@ -94,7 +137,7 @@ assert(report.includes('Kommentar terräng'));
 assert(report.includes('Polygon (JSON/GeoJSON)'));
 assert(report.includes('18.5, 59.5'));
 assert(report.includes('Brant i norr\nBlockig mark'));
-assert(report.includes('Kommentar markvegetation'));
+assert(report.includes('Kommentar terräng'));
 assert(report.includes('Kommentar – liggande död ved</b><span>Kommentar om veden'));
 assert(report.includes('<h2>Noterade naturvårdsarter</h2><p>Artobservation på egen rad</p>'));
 assert(!report.includes('</div>,<div'));
@@ -114,7 +157,7 @@ assert.equal(restored.run('Object.keys(images).length'), 2);
 const legacy = setup({'faltrapport-draft': JSON.stringify([['namn','Äldre utkast']])});
 assert.equal(legacy.field('namn').value, 'Äldre utkast');
 const legacyOther = setup({'faltrapport-draft': JSON.stringify([['strukturer','Annat'],['strukturerDetalj','Tidigare kommentar']])});
-assert.equal(legacyOther.field('strukturerDetalj').value, 'Annat: Tidigare kommentar');
+assert.equal(legacyOther.field('terrangKommentar').value, 'Annat: Tidigare kommentar');
 const badDraft = setup({'faltrapport-draft':'invalid'});
 assert(badDraft.node('#status').textContent.includes('kunde inte läsas'));
 const unavailable = setup({}, true);
@@ -189,7 +232,7 @@ async function verifyTransfer() {
   const recipient = setup();
   recipient.context.oldProtocol = {format:'faltrapport', version:1, fields:[['strukturer','Annat'],['strukturerDetalj','Tidigare kommentar']], images:{}};
   recipient.run('applyProtocol(validateProtocol(oldProtocol))');
-  assert.equal(recipient.field('strukturerDetalj').value, 'Annat: Tidigare kommentar');
+  assert.equal(recipient.field('terrangKommentar').value, 'Annat: Tidigare kommentar');
   recipient.context.imported = JSON.parse(JSON.stringify(original));
   recipient.run('applyProtocol(validateProtocol(imported))');
   assert.equal(recipient.run('protocolSignature()'), app.run('protocolSignature()'), 'JSON round trip preserves all fields and images');
