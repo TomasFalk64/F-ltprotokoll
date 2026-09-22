@@ -1,0 +1,182 @@
+{
+  "format": "faltrapport",
+  "version": 1,
+  "savedAt": "2026-09-22T00:00:00Z",
+  "fields": [
+    [
+      "sammanfattning",
+      "Fiktiv exempelinventering för att visa svarsformatet. Uppgifterna beskriver ingen verklig plats."
+    ],
+    [
+      "delomradeId",
+      "EXEMPEL-01"
+    ],
+    [
+      "namn",
+      "Exempelbeståndet"
+    ],
+    [
+      "kommun",
+      ""
+    ],
+    [
+      "fastighet",
+      ""
+    ],
+    [
+      "areal",
+      "2.75"
+    ],
+    [
+      "datum",
+      "2026-09-10"
+    ],
+    [
+      "polygonGeojson",
+      ""
+    ],
+    [
+      "centerCoordinate",
+      "Mittpunkt ej registrerad i detta fiktiva exempel."
+    ],
+    [
+      "inventerare",
+      "Exempelinventerare"
+    ],
+    [
+      "metod",
+      "Översiktlig områdesbeskrivning"
+    ],
+    [
+      "tackning",
+      "Delar/stickprov"
+    ],
+    [
+      "skogstyp",
+      "Barrblandskog"
+    ],
+    [
+      "tradslag",
+      "Tall"
+    ],
+    [
+      "tradslag",
+      "Gran"
+    ],
+    [
+      "alderDiameter",
+      "Äldre tallar bland yngre granar i den undersökta delen."
+    ],
+    [
+      "dominerandeAlder",
+      "90"
+    ],
+    [
+      "nvt3",
+      "0"
+    ],
+    [
+      "terrangKommentar",
+      "Fuktstråk i den norra delen."
+    ],
+    [
+      "strukturer",
+      "Block / beskuggade block"
+    ],
+    [
+      "ved_liggande_kommentar",
+      "Tallved i öppnare lägen; granved i en skuggig svacka."
+    ],
+    [
+      "ved_staende_kommentar",
+      "En stående död asp noterades i kanten av beståndet."
+    ],
+    [
+      "paaverkan",
+      "Gärdsgårdar"
+    ],
+    [
+      "naturvardsarter",
+      "Osäkert artfynd på granlåga; behöver bestämmas."
+    ],
+    [
+      "svamptillgang",
+      "3"
+    ],
+    [
+      "naturvardestradKommentar",
+      "En hålighet eftersöktes men noterades inte; äldre tallar i nordkanten."
+    ],
+    [
+      "landskapKommentar",
+      "Kontakt med äldre skog i öster."
+    ],
+    [
+      "markanvandning",
+      "Friluftsliv längs stigen."
+    ],
+    [
+      "kollektnoteringarDna",
+      "Fiktiv kollekt EX-01 från granlågan. DNA-analys inte utförd."
+    ],
+    [
+      "skador",
+      "Stormskador"
+    ],
+    [
+      "markskiktTackning",
+      "Hög"
+    ],
+    [
+      "markskiktTyp",
+      "Friskmosstyp"
+    ],
+    [
+      "markskiktArter",
+      "Husmossa, väggmossa"
+    ],
+    [
+      "markskiktStruktur",
+      "Sammanhängande mossmattor på fuktig mark."
+    ],
+    [
+      "faltskiktTackning",
+      "Måttlig"
+    ],
+    [
+      "faltskiktTyp",
+      "Blåbärstyp"
+    ],
+    [
+      "faltskiktArter",
+      "Blåbär"
+    ],
+    [
+      "faltskiktStruktur",
+      "Luckvis tätare ris."
+    ],
+    [
+      "buskskiktTackning",
+      "Låg"
+    ],
+    [
+      "buskskiktArter",
+      "Rönn och granuppslag"
+    ],
+    [
+      "buskskiktStruktur",
+      "Spridda ungträd."
+    ],
+    [
+      "ved_liggande",
+      "[{\"tradslag\":\"Tall\",\"annatTradslag\":\"\",\"forekomst\":\"Sparsamt\",\"grovlek\":\"Grov >40 cm\",\"nedbrytning\":\"Starkt nedbruten\",\"karaktar\":[\"Hålig\",\"Keloved/silverved\",\"Kådindränkt\"],\"annat\":\"Längsgående sprickor.\",\"klimat\":\"Solexponerad\"},{\"tradslag\":\"Gran\",\"annatTradslag\":\"\",\"forekomst\":\"Enstaka\",\"grovlek\":\"Medel 20–40 cm\",\"nedbrytning\":\"Svagt nedbruten\",\"karaktar\":[\"Barkborrepräglad\"],\"annat\":\"\",\"klimat\":\"Beskuggad\"}]"
+    ],
+    [
+      "ved_staende",
+      "[{\"tradslag\":\"Asp\",\"annatTradslag\":\"\",\"forekomst\":\"Enstaka\",\"grovlek\":\"\",\"nedbrytning\":\"\",\"karaktar\":[\"Hålig\"],\"annat\":\"\",\"klimat\":\"\"}]"
+    ]
+  ],
+  "images": {
+    "image3": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNQjfUGAAF4AM5F1lvBAAAAAElFTkSuQmCC"
+  }
+}

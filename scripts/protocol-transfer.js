@@ -113,6 +113,7 @@ function openSaveDialog() {
 }
 document.querySelector('#saveOptionsForm').addEventListener('change', updateSaveOptions);
 document.querySelector('#cancelSave').addEventListener('click', () => document.querySelector('#saveDialog').close());
+document.querySelector('#saveDialog').addEventListener('close', () => document.querySelector('#archiveMenu > summary').focus());
 document.querySelector('#saveOptionsForm').addEventListener('submit', event => {
   event.preventDefault();
   const options = {
@@ -161,16 +162,17 @@ async function saveAll(options = {json:true, word:true, html:true, compact:true}
       links.append(link);
     }
     document.querySelector('#savedFiles').hidden = false;
+    document.querySelector('#savedFiles').open = true;
     for (const link of links.children) link.click();
     setTimeout(() => previousUrls.forEach(url => URL.revokeObjectURL(url)), 30000);
     lastSavedSignature = signature;
-    setStatus(`${files.length} ${files.length === 1 ? 'fil har' : 'filer har'} skickats till nedladdningar. Om någon saknas, använd länkarna ovan.`);
+    setStatus(`${files.length} ${files.length === 1 ? 'fil har' : 'filer har'} skickats till nedladdningar. Om någon saknas, använd länkarna under toppbaren.`);
   } catch (error) {
     setStatus(`Kunde inte skapa alla rapportfiler. ${error.message} Dina uppgifter finns kvar i formuläret.`);
   } finally {
     exportInProgress = false;
     button.disabled = false;
-    button.textContent = 'Spara';
+    button.textContent = '💾 Spara / Exportera…';
   }
 }
 

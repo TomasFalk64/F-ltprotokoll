@@ -1,0 +1,3333 @@
+{
+  "definition_format_version": "2.0.0",
+  "protocol_id": "field_report_area_description",
+  "version": "3.0.0",
+  "name": "Fältrapport – områdesbeskrivning",
+  "language": "sv",
+  "updated_at": "2026-09-22T00:00:00Z",
+  "description": "Fristående protokolldefinition med webbplatsens exakta fältnamn, lagrade svarsvärden och JSON-format. Fältetiketter och alternativens label får översättas; id och value får inte ändras inom en protokollversion.",
+  "sections": [
+    {
+      "id": "overview",
+      "kind": "section",
+      "label": "Överblick",
+      "children": [
+        {
+          "field_ref": "sammanfattning"
+        },
+        {
+          "field_ref": "mapImage"
+        }
+      ]
+    },
+    {
+      "id": "identity",
+      "kind": "section",
+      "label": "Grunduppgifter",
+      "children": [
+        {
+          "id": "area",
+          "kind": "group",
+          "label": "Område",
+          "children": [
+            {
+              "field_ref": "delomradeId"
+            },
+            {
+              "field_ref": "namn"
+            },
+            {
+              "field_ref": "kommun"
+            },
+            {
+              "field_ref": "fastighet"
+            },
+            {
+              "field_ref": "areal"
+            },
+            {
+              "field_ref": "datum"
+            },
+            {
+              "field_ref": "inventerare"
+            },
+            {
+              "field_ref": "polygonGeojson"
+            },
+            {
+              "field_ref": "centerCoordinate"
+            }
+          ]
+        },
+        {
+          "id": "method",
+          "kind": "group",
+          "label": "Inventeringsmetod",
+          "children": [
+            {
+              "field_ref": "metod"
+            },
+            {
+              "field_ref": "metodDetalj"
+            }
+          ]
+        },
+        {
+          "id": "coverage",
+          "kind": "group",
+          "label": "Inventeringens täckning",
+          "children": [
+            {
+              "field_ref": "tackning"
+            }
+          ]
+        },
+        {
+          "id": "limitations",
+          "kind": "group",
+          "label": "Begränsningar",
+          "children": [
+            {
+              "field_ref": "begransning"
+            },
+            {
+              "field_ref": "svamptillgang"
+            },
+            {
+              "field_ref": "begransningDetalj"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tree_layer",
+      "kind": "section",
+      "label": "Träd",
+      "children": [
+        {
+          "field_ref": "skogstyp"
+        },
+        {
+          "field_ref": "tradslag"
+        },
+        {
+          "field_ref": "tradslagDetalj"
+        },
+        {
+          "field_ref": "sarskildSkog"
+        },
+        {
+          "field_ref": "aldersstruktur"
+        },
+        {
+          "field_ref": "skiktning"
+        },
+        {
+          "field_ref": "bestandsstruktur"
+        },
+        {
+          "field_ref": "alderDiameter"
+        },
+        {
+          "field_ref": "dominerandeAlder"
+        }
+      ]
+    },
+    {
+      "id": "ground_vegetation",
+      "kind": "section",
+      "label": "Markvegetation",
+      "children": [
+        {
+          "field_ref": "vegetation"
+        },
+        {
+          "id": "ground_layer",
+          "kind": "group",
+          "label": "Markskikt (mossor och lavar)",
+          "description": "Markskiktet är det understa vegetationsskiktet i skogen. Det befinner sig direkt på markytan (eller på stenar och stubbar) och består uteslutande av mossor, lavar och svampar. Till skillnad från fältskiktet innehåller markskiktet inga kärlväxter (arter med rötter och stammar). Det sträcker sig höjdmässigt från marknivån upp till maximalt några centimeter",
+          "children": [
+            {
+              "field_ref": "markskiktTackning"
+            },
+            {
+              "field_ref": "markskiktTyp"
+            },
+            {
+              "field_ref": "markskiktArter"
+            },
+            {
+              "field_ref": "markskiktStruktur"
+            }
+          ]
+        },
+        {
+          "id": "field_layer",
+          "kind": "group",
+          "label": "Fältskikt (rikörter)",
+          "description": "Fältskiktet är det vegetationsskikt i skogen som består av ris, örter, gräs, halvgräs (starr), ormbunkar, fräken- och lummerväxter. Det innefattar även mycket små träd- och buskplantor som är lägre än 0,5 meter. Höjdmässigt sträcker sig fältskiktet från markytan (ovanför moss- och lavlagret) upp till cirka 0,5 meter (även om enstaka manshöga örter biologiskt sett också räknas hit)",
+          "children": [
+            {
+              "field_ref": "faltskiktTackning"
+            },
+            {
+              "field_ref": "faltskiktTyp"
+            },
+            {
+              "field_ref": "faltskiktArter"
+            },
+            {
+              "field_ref": "faltskiktStruktur"
+            }
+          ]
+        },
+        {
+          "id": "shrub_layer",
+          "kind": "group",
+          "label": "Buskskikt (1–5 m)",
+          "description": "Buskskiktet är det vegetationsskikt i skogen som befinner sig höjdmässigt mellan fältskiktet och trädskiktet. Den vedertagna definitionen omfattar all vedartad vegetation (buskar och träd) som har en höjd på mellan 0,5 meter och 5 meter. Skiktet består dels av renodlade buskarter, dels av ungträd (uppslag/underväxt) som ännu inte nått trädskiktets höjd.",
+          "children": [
+            {
+              "field_ref": "buskskiktTackning"
+            },
+            {
+              "field_ref": "buskskiktArter"
+            },
+            {
+              "field_ref": "buskskiktStruktur"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "habitat_trees",
+      "kind": "section",
+      "label": "Naturvärdesträd",
+      "children": [
+        {
+          "field_ref": "nvt0"
+        },
+        {
+          "field_ref": "nvt1"
+        },
+        {
+          "field_ref": "nvt2"
+        },
+        {
+          "field_ref": "nvt3"
+        },
+        {
+          "field_ref": "nvt4"
+        },
+        {
+          "field_ref": "nvt5"
+        },
+        {
+          "field_ref": "nvt6"
+        },
+        {
+          "field_ref": "naturvardestradKommentar"
+        }
+      ]
+    },
+    {
+      "id": "terrain",
+      "kind": "section",
+      "label": "Terräng",
+      "children": [
+        {
+          "field_ref": "topografi"
+        },
+        {
+          "field_ref": "jordart"
+        },
+        {
+          "field_ref": "markfuktighet"
+        },
+        {
+          "field_ref": "hydrologi"
+        },
+        {
+          "field_ref": "markkemi"
+        },
+        {
+          "field_ref": "strukturer"
+        },
+        {
+          "field_ref": "terrangKommentar"
+        }
+      ]
+    },
+    {
+      "id": "deadwood",
+      "kind": "section",
+      "label": "Död ved",
+      "children": [
+        {
+          "id": "deadwood_lying",
+          "kind": "group",
+          "label": "Liggande död ved",
+          "children": [
+            {
+              "field_ref": "ved_liggande"
+            },
+            {
+              "field_ref": "ved_liggande_kommentar"
+            }
+          ]
+        },
+        {
+          "id": "deadwood_standing",
+          "kind": "group",
+          "label": "Stående död ved",
+          "children": [
+            {
+              "field_ref": "ved_staende"
+            },
+            {
+              "field_ref": "ved_staende_kommentar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "processes_impact",
+      "kind": "section",
+      "label": "Påverkan",
+      "children": [
+        {
+          "field_ref": "processer"
+        },
+        {
+          "field_ref": "paaverkan"
+        },
+        {
+          "field_ref": "skador"
+        },
+        {
+          "field_ref": "markanvandning"
+        }
+      ]
+    },
+    {
+      "id": "species_observations",
+      "kind": "section",
+      "label": "Arter",
+      "children": [
+        {
+          "field_ref": "naturvardsarter"
+        },
+        {
+          "field_ref": "kollektnoteringarDna"
+        }
+      ]
+    },
+    {
+      "id": "landscape_context",
+      "kind": "section",
+      "label": "Landskap",
+      "children": [
+        {
+          "field_ref": "anslutande"
+        },
+        {
+          "field_ref": "landskap"
+        },
+        {
+          "field_ref": "grans"
+        },
+        {
+          "field_ref": "landskapKommentar"
+        }
+      ]
+    },
+    {
+      "id": "documentation",
+      "kind": "section",
+      "label": "Dokumentation",
+      "children": [
+        {
+          "field_ref": "image1"
+        },
+        {
+          "field_ref": "image2"
+        },
+        {
+          "field_ref": "image3"
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "id": "sammanfattning",
+      "label": "Sammanfattning",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Beskriv områdets viktigaste karaktärer och naturvärdesstrukturer. Ange om någon del inte har kunnat inventeras."
+    },
+    {
+      "id": "delomradeId",
+      "label": "Delområde-ID",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "namn",
+      "label": "Namn på delområde",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "kommun",
+      "label": "Kommun / Ort",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "fastighet",
+      "label": "Fastighetsbeteckning",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "areal",
+      "label": "Areal",
+      "type": "decimal",
+      "required": false,
+      "storage": "fields",
+      "unit": "ha",
+      "minimum": 0,
+      "step": 0.01
+    },
+    {
+      "id": "datum",
+      "label": "Inventeringsdatum",
+      "type": "date",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "polygonGeojson",
+      "label": "Polygon",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Polygonbeskrivning som text, exempelvis JSON/GeoJSON. Ingen geografisk tolkning eller validering krävs."
+    },
+    {
+      "id": "centerCoordinate",
+      "label": "Mittpunktskoordinat",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Mittpunkten som text. Koordinatsystem kan anges i texten."
+    },
+    {
+      "id": "inventerare",
+      "label": "Inventerare",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "metod",
+      "label": "Inventeringsmetod",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Översiktlig områdesbeskrivning",
+          "label": "Översiktlig områdesbeskrivning"
+        },
+        {
+          "value": "Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad",
+          "label": "Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad"
+        },
+        {
+          "value": "Riktad artinventering",
+          "label": "Riktad artinventering"
+        },
+        {
+          "value": "Annan",
+          "label": "Annan"
+        }
+      ]
+    },
+    {
+      "id": "metodDetalj",
+      "label": "Nivå/detaljeringsgrad, inriktning eller annan metod",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Ange om annan metod använts."
+    },
+    {
+      "id": "tackning",
+      "label": "Inventeringens täckning",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Hela området genomgånget",
+          "label": "Hela området genomgånget"
+        },
+        {
+          "value": "Större delen genomgången",
+          "label": "Större delen genomgången"
+        },
+        {
+          "value": "Delar/stickprov",
+          "label": "Delar/stickprov"
+        }
+      ]
+    },
+    {
+      "id": "begransning",
+      "label": "Begränsningar",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Inga betydande",
+          "label": "Inga betydande"
+        },
+        {
+          "value": "Snötäckt mark",
+          "label": "Snötäckt mark"
+        },
+        {
+          "value": "Tät vegetation/dålig sikt",
+          "label": "Tät vegetation/dålig sikt"
+        },
+        {
+          "value": "Svårframkomlig terräng",
+          "label": "Svårframkomlig terräng"
+        },
+        {
+          "value": "Tidsbegränsning",
+          "label": "Tidsbegränsning"
+        }
+      ]
+    },
+    {
+      "id": "begransningDetalj",
+      "label": "Beskriv begränsningar och delar som inte inventerats",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "skogstyp",
+      "label": "Skogstyp",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Grandominerad",
+          "label": "Grandominerad"
+        },
+        {
+          "value": "Talldominerad",
+          "label": "Talldominerad"
+        },
+        {
+          "value": "Barrblandskog",
+          "label": "Barrblandskog"
+        },
+        {
+          "value": "Blandskog barr/löv",
+          "label": "Blandskog barr/löv"
+        },
+        {
+          "value": "Lövdominerad",
+          "label": "Lövdominerad"
+        }
+      ]
+    },
+    {
+      "id": "tradslag",
+      "label": "Trädslag som förekommer",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Gran",
+          "label": "Gran"
+        },
+        {
+          "value": "Tall",
+          "label": "Tall"
+        },
+        {
+          "value": "Björk",
+          "label": "Björk"
+        },
+        {
+          "value": "Asp",
+          "label": "Asp"
+        },
+        {
+          "value": "Sälg",
+          "label": "Sälg"
+        },
+        {
+          "value": "Rönn",
+          "label": "Rönn"
+        },
+        {
+          "value": "Ek",
+          "label": "Ek"
+        }
+      ]
+    },
+    {
+      "id": "tradslagDetalj",
+      "label": "Övriga trädslag",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "sarskildSkog",
+      "label": "Särskilda skogstyper",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Hällmarkstallskog",
+          "label": "Hällmarkstallskog"
+        },
+        {
+          "value": "Sumpskog",
+          "label": "Sumpskog"
+        },
+        {
+          "value": "Tallmosse",
+          "label": "Tallmosse"
+        },
+        {
+          "value": "Bäckdrag",
+          "label": "Bäckdrag"
+        },
+        {
+          "value": "Ädellöv",
+          "label": "Ädellöv"
+        }
+      ]
+    },
+    {
+      "id": "aldersstruktur",
+      "label": "Åldersstruktur",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Likåldrig",
+          "label": "Likåldrig"
+        },
+        {
+          "value": "Viss åldersspridning",
+          "label": "Viss åldersspridning"
+        },
+        {
+          "value": "Olikåldrig / flera trädgenerationer",
+          "label": "Olikåldrig / flera trädgenerationer"
+        }
+      ]
+    },
+    {
+      "id": "skiktning",
+      "label": "Skiktning",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Enskiktad",
+          "label": "Enskiktad"
+        },
+        {
+          "value": "Tvåskiktad",
+          "label": "Tvåskiktad"
+        },
+        {
+          "value": "Flerskiktad",
+          "label": "Flerskiktad"
+        }
+      ]
+    },
+    {
+      "id": "alderDiameter",
+      "label": "Kommentar trädskikt",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "dominerandeAlder",
+      "label": "Dominerande ålder",
+      "type": "integer",
+      "required": false,
+      "storage": "fields",
+      "unit": "a",
+      "minimum": 0,
+      "step": 1
+    },
+    {
+      "id": "nvt0",
+      "label": "Gamla barrträd (plattkronor/grov bark etc.)",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "nvt1",
+      "label": "Särskilt värdefulla lövträd (asp, sälg, rönn, ek)",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "nvt2",
+      "label": "Grova träd (>50 cm dbh)",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "nvt3",
+      "label": "Hålträd/stamhåligheter",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "nvt4",
+      "label": "Skadade träd/brandljud/blottad ved",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "nvt5",
+      "label": "Träd med riklig lav-/mossvegetation",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "nvt6",
+      "label": "Kjolgranar/senvuxna undertryckta träd",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "bestandsstruktur",
+      "label": "Beståndsstruktur",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Slutet",
+          "label": "Slutet"
+        },
+        {
+          "value": "Luckor/öppningar",
+          "label": "Luckor/öppningar"
+        },
+        {
+          "value": "Riklig underväxt",
+          "label": "Riklig underväxt"
+        }
+      ]
+    },
+    {
+      "id": "topografi",
+      "label": "Topografi",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Plant",
+          "label": "Plant"
+        },
+        {
+          "value": "Sluttande",
+          "label": "Sluttande"
+        },
+        {
+          "value": "Kuperat",
+          "label": "Kuperat"
+        },
+        {
+          "value": "Branter/Lodytor",
+          "label": "Branter/Lodytor"
+        },
+        {
+          "value": "Blockmark",
+          "label": "Blockmark"
+        }
+      ]
+    },
+    {
+      "id": "jordart",
+      "label": "Jordart",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Morän",
+          "label": "Morän"
+        },
+        {
+          "value": "Sand/Grus",
+          "label": "Sand/Grus"
+        },
+        {
+          "value": "Torv/Organisk",
+          "label": "Torv/Organisk"
+        },
+        {
+          "value": "Lera",
+          "label": "Lera"
+        },
+        {
+          "value": "Berg i dagen",
+          "label": "Berg i dagen"
+        }
+      ]
+    },
+    {
+      "id": "markfuktighet",
+      "label": "Markfuktighet",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Torr",
+          "label": "Torr"
+        },
+        {
+          "value": "Frisk",
+          "label": "Frisk"
+        },
+        {
+          "value": "Fuktig",
+          "label": "Fuktig"
+        },
+        {
+          "value": "Blöt",
+          "label": "Blöt"
+        }
+      ]
+    },
+    {
+      "id": "hydrologi",
+      "label": "Hydrologi",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Källpåverkat/Översilning",
+          "label": "Källpåverkat/Översilning"
+        },
+        {
+          "value": "Bäck/Dike",
+          "label": "Bäck/Dike"
+        },
+        {
+          "value": "Småvatten",
+          "label": "Småvatten"
+        },
+        {
+          "value": "Sumpskogsstråk",
+          "label": "Sumpskogsstråk"
+        }
+      ]
+    },
+    {
+      "id": "markkemi",
+      "label": "Markkemi",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Kalkpåverkad / Rikt markvatten",
+          "label": "Kalkpåverkad / Rikt markvatten"
+        },
+        {
+          "value": "Surt / Näringsfattigt",
+          "label": "Surt / Näringsfattigt"
+        }
+      ]
+    },
+    {
+      "id": "terrangKommentar",
+      "label": "Kommentar terräng",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Variation inom området, fuktstråk och särskilda delmiljöer."
+    },
+    {
+      "id": "vegetation",
+      "label": "Vegetationstyp",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Risdominerad (blåbär, lingon, ljung)",
+          "label": "Risdominerad (blåbär, lingon, ljung)"
+        },
+        {
+          "value": "Mossdominerad (husmossa, väggmossa)",
+          "label": "Mossdominerad (husmossa, väggmossa)"
+        },
+        {
+          "value": "Ört-/Gräsrik (högörter, lågörter)",
+          "label": "Ört-/Gräsrik (högörter, lågörter)"
+        },
+        {
+          "value": "Ormbunksrik",
+          "label": "Ormbunksrik"
+        },
+        {
+          "value": "Fuktvegetation (vitmossor, starr, fräken)",
+          "label": "Fuktvegetation (vitmossor, starr, fräken)"
+        },
+        {
+          "value": "Kalkindikatorer",
+          "label": "Kalkindikatorer"
+        }
+      ]
+    },
+    {
+      "id": "strukturer",
+      "label": "Särskilda strukturer & småmiljöer",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Lodytor / bergväggar",
+          "label": "Lodytor / bergväggar"
+        },
+        {
+          "value": "Block / beskuggade block",
+          "label": "Block / beskuggade block"
+        },
+        {
+          "value": "Hällmarker",
+          "label": "Hällmarker"
+        },
+        {
+          "value": "Källmiljö / översilning",
+          "label": "Källmiljö / översilning"
+        },
+        {
+          "value": "Bäck / fuktstråk",
+          "label": "Bäck / fuktstråk"
+        },
+        {
+          "value": "Sumpskog",
+          "label": "Sumpskog"
+        },
+        {
+          "value": "Övergång skog–myr/våtmark",
+          "label": "Övergång skog–myr/våtmark"
+        },
+        {
+          "value": "Solexponerad ved / gamla träd",
+          "label": "Solexponerad ved / gamla träd"
+        }
+      ]
+    },
+    {
+      "id": "ved_liggande_kommentar",
+      "label": "Kommentar – liggande död ved",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Lågornas läge, markkontakt, fuktighet, nedbrytning och variation i dimensioner."
+    },
+    {
+      "id": "ved_staende_kommentar",
+      "label": "Kommentar – stående död ved",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Torrakor och högstubbar: höjd, dimensioner, håligheter, bark och solexponering."
+    },
+    {
+      "id": "processer",
+      "label": "Naturprocesser & kontinuitet",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Lång trädkontinuitet",
+          "label": "Lång trädkontinuitet"
+        },
+        {
+          "value": "Kontinuerlig tillförsel av död ved",
+          "label": "Kontinuerlig tillförsel av död ved"
+        },
+        {
+          "value": "Naturlig självgallring / Luckdynamik",
+          "label": "Naturlig självgallring / Luckdynamik"
+        },
+        {
+          "value": "Rotvältor / Vindfällen",
+          "label": "Rotvältor / Vindfällen"
+        },
+        {
+          "value": "Brandspår (kolade stubbar/träd)",
+          "label": "Brandspår (kolade stubbar/träd)"
+        },
+        {
+          "value": "Naturlig översvämning / vattenståndsvariation",
+          "label": "Naturlig översvämning / vattenståndsvariation"
+        }
+      ]
+    },
+    {
+      "id": "paaverkan",
+      "label": "Mänsklig påverkan",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Gärdsgårdar",
+          "label": "Gärdsgårdar"
+        },
+        {
+          "value": "Gamla stubbar",
+          "label": "Gamla stubbar"
+        },
+        {
+          "value": "Färska stubbar",
+          "label": "Färska stubbar"
+        },
+        {
+          "value": "Gallrat / Röjt",
+          "label": "Gallrat / Röjt"
+        },
+        {
+          "value": "Stickvägar / Körskador i mark",
+          "label": "Stickvägar / Körskador i mark"
+        },
+        {
+          "value": "Dikning (aktiva / igensatta dikesdrag)",
+          "label": "Dikning (aktiva / igensatta dikesdrag)"
+        },
+        {
+          "value": "Plantering / Markberett",
+          "label": "Plantering / Markberett"
+        },
+        {
+          "value": "Vägar / kraftledningsgata / annan exploatering",
+          "label": "Vägar / kraftledningsgata / annan exploatering"
+        }
+      ]
+    },
+    {
+      "id": "naturvardsarter",
+      "label": "Noterade naturvårdsarter",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Rödlistade arter, signalarter och fridlysta arter."
+    },
+    {
+      "id": "anslutande",
+      "label": "Anslutande värden",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)",
+          "label": "Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)"
+        },
+        {
+          "value": "Äldre skog gränsar till området",
+          "label": "Äldre skog gränsar till området"
+        }
+      ]
+    },
+    {
+      "id": "landskap",
+      "label": "Landskapsekologi",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Ingår i ett större sammanhängande värdeområde",
+          "label": "Ingår i ett större sammanhängande värdeområde"
+        },
+        {
+          "value": "Ekologisk korridor / Bäckdrag",
+          "label": "Ekologisk korridor / Bäckdrag"
+        }
+      ]
+    },
+    {
+      "id": "grans",
+      "label": "Gränsdragning",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Ekologisk gräns",
+          "label": "Ekologisk gräns"
+        },
+        {
+          "value": "Administrativ gräns (fastighetsgräns/hyggeskant)",
+          "label": "Administrativ gräns (fastighetsgräns/hyggeskant)"
+        }
+      ]
+    },
+    {
+      "id": "svamptillgang",
+      "label": "Svamptillgång",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "description": "Tillgång på svamp vid inventeringstillfället. 0 är konstaterad frånvaro; obesvarat är ej bedömt.",
+      "options": [
+        {
+          "value": "0",
+          "label": "0 – saknas"
+        },
+        {
+          "value": "1",
+          "label": "1 – enstaka"
+        },
+        {
+          "value": "2",
+          "label": "2 – sparsamt"
+        },
+        {
+          "value": "3",
+          "label": "3 – måttligt"
+        },
+        {
+          "value": "4",
+          "label": "4 – rikligt"
+        }
+      ]
+    },
+    {
+      "id": "naturvardestradKommentar",
+      "label": "Kommentar naturvärdesträd",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Trädslag, dimension, särdrag och läge."
+    },
+    {
+      "id": "landskapKommentar",
+      "label": "Kommentar landskap",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Samband med omgivningen, barriärer och övergångar."
+    },
+    {
+      "id": "markanvandning",
+      "label": "Pågående markanvändning",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "kollektnoteringarDna",
+      "label": "Kollektnoteringar / DNA",
+      "type": "text",
+      "required": false,
+      "storage": "fields",
+      "description": "Fritext om kollekter och DNA: kollekt-ID, artfynd, substrat, plats och analysstatus. Ingen obligatorisk koppling till enskilda artposter."
+    },
+    {
+      "id": "skador",
+      "label": "Skador",
+      "type": "multienum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Granbarkborre",
+          "label": "Granbarkborre"
+        },
+        {
+          "value": "Stormskador",
+          "label": "Stormskador"
+        },
+        {
+          "value": "Vildsvinsbök",
+          "label": "Vildsvinsbök"
+        }
+      ]
+    },
+    {
+      "id": "markskiktTackning",
+      "label": "Täckningsgrad",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Låg",
+          "label": "Låg"
+        },
+        {
+          "value": "Måttlig",
+          "label": "Måttlig"
+        },
+        {
+          "value": "Hög",
+          "label": "Hög"
+        }
+      ]
+    },
+    {
+      "id": "markskiktTyp",
+      "label": "Markskiktstyp",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Friskmosstyp",
+          "label": "Friskmosstyp"
+        },
+        {
+          "value": "Lavrik typ",
+          "label": "Lavrik typ"
+        },
+        {
+          "value": "Lavtyp",
+          "label": "Lavtyp"
+        },
+        {
+          "value": "Sumpmosstyp",
+          "label": "Sumpmosstyp"
+        }
+      ]
+    },
+    {
+      "id": "markskiktArter",
+      "label": "Dominerande arter",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "markskiktStruktur",
+      "label": "Struktur & funktion",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "faltskiktTackning",
+      "label": "Täckningsgrad",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Låg",
+          "label": "Låg"
+        },
+        {
+          "value": "Måttlig",
+          "label": "Måttlig"
+        },
+        {
+          "value": "Hög",
+          "label": "Hög"
+        }
+      ]
+    },
+    {
+      "id": "faltskiktTyp",
+      "label": "Fältskiktstyp",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Ädelörtstyp",
+          "label": "Ädelörtstyp"
+        },
+        {
+          "value": "Högörtstyp",
+          "label": "Högörtstyp"
+        },
+        {
+          "value": "Lågörtstyp",
+          "label": "Lågörtstyp"
+        },
+        {
+          "value": "Bredbladig grästyp",
+          "label": "Bredbladig grästyp"
+        },
+        {
+          "value": "Smalbladig grästyp",
+          "label": "Smalbladig grästyp"
+        },
+        {
+          "value": "Blåbärstyp",
+          "label": "Blåbärstyp"
+        },
+        {
+          "value": "Lingontyp",
+          "label": "Lingontyp"
+        },
+        {
+          "value": "Skvattramstyp",
+          "label": "Skvattramstyp"
+        }
+      ]
+    },
+    {
+      "id": "faltskiktArter",
+      "label": "Dominerande arter",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "faltskiktStruktur",
+      "label": "Struktur & funktion",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "buskskiktTackning",
+      "label": "Täckningsgrad",
+      "type": "enum",
+      "required": false,
+      "storage": "fields",
+      "options": [
+        {
+          "value": "Låg",
+          "label": "Låg"
+        },
+        {
+          "value": "Måttlig",
+          "label": "Måttlig"
+        },
+        {
+          "value": "Hög",
+          "label": "Hög"
+        }
+      ]
+    },
+    {
+      "id": "buskskiktArter",
+      "label": "Dominerande arter",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "buskskiktStruktur",
+      "label": "Struktur & funktion",
+      "type": "text",
+      "required": false,
+      "storage": "fields"
+    },
+    {
+      "id": "ved_liggande",
+      "label": "Liggande död ved",
+      "type": "records",
+      "required": false,
+      "storage": "fields",
+      "record_type": "deadwood",
+      "encoding": "json-string-array",
+      "max_records": 100
+    },
+    {
+      "id": "ved_staende",
+      "label": "Stående död ved",
+      "type": "records",
+      "required": false,
+      "storage": "fields",
+      "record_type": "deadwood",
+      "encoding": "json-string-array",
+      "max_records": 100
+    },
+    {
+      "id": "mapImage",
+      "label": "Kartbild",
+      "type": "attachment",
+      "required": false,
+      "storage": "images",
+      "description": "Områdets läge och avgränsning."
+    },
+    {
+      "id": "image1",
+      "label": "Översiktsbild av beståndet",
+      "type": "attachment",
+      "required": false,
+      "storage": "images"
+    },
+    {
+      "id": "image2",
+      "label": "Särskilt naturvärdeselement",
+      "type": "attachment",
+      "required": false,
+      "storage": "images"
+    },
+    {
+      "id": "image3",
+      "label": "Extra dokumentation",
+      "type": "attachment",
+      "required": false,
+      "storage": "images"
+    }
+  ],
+  "record_types": {
+    "deadwood": {
+      "fields": [
+        {
+          "id": "tradslag",
+          "label": "Trädslag",
+          "type": "enum",
+          "required": false,
+          "storage": "record",
+          "options": [
+            {
+              "value": "Gran",
+              "label": "Gran"
+            },
+            {
+              "value": "Tall",
+              "label": "Tall"
+            },
+            {
+              "value": "Björk",
+              "label": "Björk"
+            },
+            {
+              "value": "Asp",
+              "label": "Asp"
+            },
+            {
+              "value": "Sälg",
+              "label": "Sälg"
+            },
+            {
+              "value": "Rönn",
+              "label": "Rönn"
+            },
+            {
+              "value": "Ek",
+              "label": "Ek"
+            },
+            {
+              "value": "Al",
+              "label": "Al"
+            },
+            {
+              "value": "Bok",
+              "label": "Bok"
+            },
+            {
+              "value": "Ask",
+              "label": "Ask"
+            },
+            {
+              "value": "Alm",
+              "label": "Alm"
+            },
+            {
+              "value": "Lind",
+              "label": "Lind"
+            },
+            {
+              "value": "Lönn",
+              "label": "Lönn"
+            },
+            {
+              "value": "Annat",
+              "label": "Annat"
+            }
+          ]
+        },
+        {
+          "id": "annatTradslag",
+          "label": "Ange trädslag",
+          "type": "text",
+          "required": false,
+          "storage": "record",
+          "applicable_when": {
+            "field": "tradslag",
+            "equals": "Annat"
+          }
+        },
+        {
+          "id": "forekomst",
+          "label": "Förekomst",
+          "type": "enum",
+          "required": false,
+          "storage": "record",
+          "options": [
+            {
+              "value": "Saknas",
+              "label": "0 – saknas"
+            },
+            {
+              "value": "Enstaka",
+              "label": "1 – enstaka"
+            },
+            {
+              "value": "Sparsamt",
+              "label": "2 – sparsamt"
+            },
+            {
+              "value": "Måttligt",
+              "label": "3 – måttligt"
+            },
+            {
+              "value": "Rikligt",
+              "label": "4 – rikligt"
+            }
+          ]
+        },
+        {
+          "id": "grovlek",
+          "label": "Grovlek",
+          "type": "enum",
+          "required": false,
+          "storage": "record",
+          "options": [
+            {
+              "value": "Klen <20 cm",
+              "label": "Klen <20 cm"
+            },
+            {
+              "value": "Medel 20–40 cm",
+              "label": "Medel 20–40 cm"
+            },
+            {
+              "value": "Grov >40 cm",
+              "label": "Grov >40 cm"
+            },
+            {
+              "value": "Blandade dimensioner",
+              "label": "Blandade dimensioner"
+            }
+          ]
+        },
+        {
+          "id": "nedbrytning",
+          "label": "Nedbrytning",
+          "type": "enum",
+          "required": false,
+          "storage": "record",
+          "options": [
+            {
+              "value": "Nyligen död",
+              "label": "Nyligen död"
+            },
+            {
+              "value": "Svagt nedbruten",
+              "label": "Svagt nedbruten"
+            },
+            {
+              "value": "Måttligt nedbruten",
+              "label": "Måttligt nedbruten"
+            },
+            {
+              "value": "Starkt nedbruten",
+              "label": "Starkt nedbruten"
+            },
+            {
+              "value": "Mycket starkt nedbruten",
+              "label": "Mycket starkt nedbruten"
+            }
+          ]
+        },
+        {
+          "id": "karaktar",
+          "label": "Vedkaraktär",
+          "type": "multienum",
+          "required": false,
+          "storage": "record",
+          "options": [
+            {
+              "value": "Hålig",
+              "label": "Hålig"
+            },
+            {
+              "value": "Brandpräglad",
+              "label": "Brandpräglad"
+            },
+            {
+              "value": "Keloved/silverved",
+              "label": "Keloved/silverved",
+              "applicable_when": {
+                "field": "tradslag",
+                "equals": "Tall"
+              }
+            },
+            {
+              "value": "Kådindränkt",
+              "label": "Kådindränkt",
+              "applicable_when": {
+                "field": "tradslag",
+                "equals": "Tall"
+              }
+            },
+            {
+              "value": "Törskatepräglad",
+              "label": "Törskatepräglad",
+              "applicable_when": {
+                "field": "tradslag",
+                "equals": "Tall"
+              }
+            },
+            {
+              "value": "Barkborrepräglad",
+              "label": "Barkborrepräglad",
+              "applicable_when": {
+                "field": "tradslag",
+                "equals": "Gran"
+              }
+            }
+          ]
+        },
+        {
+          "id": "annat",
+          "label": "Annan vedkaraktär",
+          "type": "text",
+          "required": false,
+          "storage": "record"
+        },
+        {
+          "id": "klimat",
+          "label": "Mikroklimat",
+          "type": "enum",
+          "required": false,
+          "storage": "record",
+          "options": [
+            {
+              "value": "Solexponerad",
+              "label": "Solexponerad"
+            },
+            {
+              "value": "Beskuggad",
+              "label": "Beskuggad"
+            }
+          ]
+        }
+      ],
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "properties": {
+            "tradslag": {
+              "type": "string",
+              "enum": [
+                "",
+                "Gran",
+                "Tall",
+                "Björk",
+                "Asp",
+                "Sälg",
+                "Rönn",
+                "Ek",
+                "Al",
+                "Bok",
+                "Ask",
+                "Alm",
+                "Lind",
+                "Lönn",
+                "Annat"
+              ]
+            },
+            "annatTradslag": {
+              "type": "string"
+            },
+            "forekomst": {
+              "type": "string",
+              "enum": [
+                "",
+                "Saknas",
+                "Enstaka",
+                "Sparsamt",
+                "Måttligt",
+                "Rikligt"
+              ]
+            },
+            "grovlek": {
+              "type": "string",
+              "enum": [
+                "",
+                "Klen <20 cm",
+                "Medel 20–40 cm",
+                "Grov >40 cm",
+                "Blandade dimensioner"
+              ]
+            },
+            "nedbrytning": {
+              "type": "string",
+              "enum": [
+                "",
+                "Nyligen död",
+                "Svagt nedbruten",
+                "Måttligt nedbruten",
+                "Starkt nedbruten",
+                "Mycket starkt nedbruten"
+              ]
+            },
+            "karaktar": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "Hålig",
+                  "Brandpräglad",
+                  "Keloved/silverved",
+                  "Kådindränkt",
+                  "Törskatepräglad",
+                  "Barkborrepräglad"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "annat": {
+              "type": "string"
+            },
+            "klimat": {
+              "type": "string",
+              "enum": [
+                "",
+                "Solexponerad",
+                "Beskuggad"
+              ]
+            }
+          },
+          "required": [
+            "tradslag",
+            "annatTradslag",
+            "forekomst",
+            "grovlek",
+            "nedbrytning",
+            "karaktar",
+            "annat",
+            "klimat"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "tradslag": {
+                    "const": "Annat"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "annatTradslag": {
+                    "const": ""
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "tradslag": {
+                    "const": "Tall"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "karaktar": {
+                    "not": {
+                      "contains": {
+                        "const": "Keloved/silverved"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "tradslag": {
+                    "const": "Tall"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "karaktar": {
+                    "not": {
+                      "contains": {
+                        "const": "Kådindränkt"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "tradslag": {
+                    "const": "Tall"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "karaktar": {
+                    "not": {
+                      "contains": {
+                        "const": "Törskatepräglad"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "tradslag": {
+                    "const": "Gran"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "karaktar": {
+                    "not": {
+                      "contains": {
+                        "const": "Barkborrepräglad"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "response_format": {
+    "format": "faltrapport",
+    "version": 1,
+    "description": "En inventering är ett JSON-objekt med format, version, fields och images samt valfri savedAt. Detta är samma format som webbplatsens JSON-export, utan mappning till andra fältnamn.",
+    "rules": [
+      "fields är en lista av [fältnamn, strängvärde]. Samtliga värden här är strängar, även datum, tal och dödvedslistor. Alla fält är frivilliga; tom sträng betyder obesvarat/ej bedömt, aldrig konstaterad frånvaro.",
+      "Ett multienum-fält förekommer en gång per valt value. Inget val betyder att inga par finns för namnet. Samma alternativ får inte upprepas. Övriga fältnamn får förekomma högst en gång. Ordningen på dessa par är inte betydelsebärande.",
+      "Enum sparas med alternativets value, aldrig dess label. Naturvärdesträd och svamptillgång använder strängarna 0–4. 0 är konstaterad frånvaro och ska alltid bevaras. Död ved använder textvärden, exempelvis Saknas.",
+      "integer och decimal sparas som talsträngar med punkt som decimaltecken. Validera att de är ändliga och följer fältets minimum och step; datum ska vara giltiga kalenderdatum i YYYY-MM-DD.",
+      "ved_liggande och ved_staende är tom sträng eller en JSON-kodad lista av poster. Avkoda strängen och validera mot record_types.deadwood.schema. Varje post innehåller alla åtta nycklar även när deras värden är tomma; karaktar är en lista, övriga postvärden strängar. Postordningen bevaras och tomma poster får utelämnas.",
+      "Tillämplighetsvillkor gäller inom samma dödvedspost. annatTradslag ska vara tomt om tradslag inte är Annat. Trädslagsspecifika karaktar-värden får endast användas för det trädslag som anges av applicable_when. Annan vedkaraktär i annat är alltid tillåten.",
+      "images är ett objekt med de fyra tillåtna bildnycklarna. En registrerad bild sparas som data:image/jpeg, png eller webp med ;base64, och bilddata. Oregistrerade bildnycklar utelämnas. Kontrollera base64, MIME-typ och att bilden går att avkoda. Maximalt 40 miljoner pixlar per bild vid import.",
+      "Kompatibel webbimport tillåter högst 30 MB per fil, 500 namn/värde-par, 100000 tecken per strängvärde i fields och 100 poster per dödvedslista. Bildernas base64 ingår i filstorleken. Webbplatsen skalar nya bilder till högst 1600 pixlar på längsta sidan.",
+      "savedAt är exporttid och inte inventeringsdatum, skapandetid eller garanterad senaste redigeringstid.",
+      "Webbexport version 1 saknar protokoll-ID, innehållsversion och beständiga post-ID:n. Dess version anger bara exportformatet. För entydig historisk spårbarhet måste denna protokollversion därför följa med separat; en framtida ändring av appens export behövs för att bädda in referensen.",
+      "Validera först response_format.schema och därefter reglerna här: schemavalidering ensam kontrollerar inte unika skalära fältnamn, avkodade dödvedsposter, bildinnehåll eller numeriska steg. Okända fält eller svarsvärden ska rapporteras, inte tappas bort.",
+      "Sektioner och grupper beskriver formulärets innehåll, men skapar ingen extra nästling i inventeringsfilen. Webbplatsen läser inte denna definitionsfil vid körning; andra implementationer kan använda den för att bygga egna formulär."
+    ],
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "fields",
+        "images"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "faltrapport"
+        },
+        "version": {
+          "const": 1
+        },
+        "savedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "fields": {
+          "type": "array",
+          "maxItems": 500,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "sammanfattning"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "delomradeId"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "namn"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "kommun"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "fastighet"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "areal"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000,
+                    "pattern": "^(?:|-?(?:\\d+|\\d*\\.\\d+)(?:[eE][+-]?\\d+)?)$"
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "datum"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000,
+                    "anyOf": [
+                      {
+                        "const": ""
+                      },
+                      {
+                        "format": "date",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      }
+                    ]
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "polygonGeojson"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "centerCoordinate"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "inventerare"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "metod"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Översiktlig områdesbeskrivning",
+                      "Naturvärdesinventering (NVI), ange nivå/detaljeringsgrad",
+                      "Riktad artinventering",
+                      "Annan"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "metodDetalj"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "tackning"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Hela området genomgånget",
+                      "Större delen genomgången",
+                      "Delar/stickprov"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "begransning"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Inga betydande",
+                      "Snötäckt mark",
+                      "Tät vegetation/dålig sikt",
+                      "Svårframkomlig terräng",
+                      "Tidsbegränsning"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "begransningDetalj"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "skogstyp"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Grandominerad",
+                      "Talldominerad",
+                      "Barrblandskog",
+                      "Blandskog barr/löv",
+                      "Lövdominerad"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "tradslag"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Gran",
+                      "Tall",
+                      "Björk",
+                      "Asp",
+                      "Sälg",
+                      "Rönn",
+                      "Ek"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "tradslagDetalj"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "sarskildSkog"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Hällmarkstallskog",
+                      "Sumpskog",
+                      "Tallmosse",
+                      "Bäckdrag",
+                      "Ädellöv"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "aldersstruktur"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Likåldrig",
+                      "Viss åldersspridning",
+                      "Olikåldrig / flera trädgenerationer"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "skiktning"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Enskiktad",
+                      "Tvåskiktad",
+                      "Flerskiktad"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "alderDiameter"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "dominerandeAlder"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000,
+                    "pattern": "^(?:|-?(?:\\d+|\\d*\\.\\d+)(?:[eE][+-]?\\d+)?)$"
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt0"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt1"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt2"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt3"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt4"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt5"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "nvt6"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "bestandsstruktur"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Slutet",
+                      "Luckor/öppningar",
+                      "Riklig underväxt"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "topografi"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Plant",
+                      "Sluttande",
+                      "Kuperat",
+                      "Branter/Lodytor",
+                      "Blockmark"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "jordart"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Morän",
+                      "Sand/Grus",
+                      "Torv/Organisk",
+                      "Lera",
+                      "Berg i dagen"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markfuktighet"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Torr",
+                      "Frisk",
+                      "Fuktig",
+                      "Blöt"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "hydrologi"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Källpåverkat/Översilning",
+                      "Bäck/Dike",
+                      "Småvatten",
+                      "Sumpskogsstråk"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markkemi"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Kalkpåverkad / Rikt markvatten",
+                      "Surt / Näringsfattigt"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "terrangKommentar"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "vegetation"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Risdominerad (blåbär, lingon, ljung)",
+                      "Mossdominerad (husmossa, väggmossa)",
+                      "Ört-/Gräsrik (högörter, lågörter)",
+                      "Ormbunksrik",
+                      "Fuktvegetation (vitmossor, starr, fräken)",
+                      "Kalkindikatorer"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "strukturer"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Lodytor / bergväggar",
+                      "Block / beskuggade block",
+                      "Hällmarker",
+                      "Källmiljö / översilning",
+                      "Bäck / fuktstråk",
+                      "Sumpskog",
+                      "Övergång skog–myr/våtmark",
+                      "Solexponerad ved / gamla träd"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "ved_liggande_kommentar"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "ved_staende_kommentar"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "processer"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Lång trädkontinuitet",
+                      "Kontinuerlig tillförsel av död ved",
+                      "Naturlig självgallring / Luckdynamik",
+                      "Rotvältor / Vindfällen",
+                      "Brandspår (kolade stubbar/träd)",
+                      "Naturlig översvämning / vattenståndsvariation"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "paaverkan"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Gärdsgårdar",
+                      "Gamla stubbar",
+                      "Färska stubbar",
+                      "Gallrat / Röjt",
+                      "Stickvägar / Körskador i mark",
+                      "Dikning (aktiva / igensatta dikesdrag)",
+                      "Plantering / Markberett",
+                      "Vägar / kraftledningsgata / annan exploatering"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "naturvardsarter"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "anslutande"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Gränsar till skyddad natur (NR/VSO/Nyckelbiotop)",
+                      "Äldre skog gränsar till området"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "landskap"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Ingår i ett större sammanhängande värdeområde",
+                      "Ekologisk korridor / Bäckdrag"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "grans"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Ekologisk gräns",
+                      "Administrativ gräns (fastighetsgräns/hyggeskant)"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "svamptillgang"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "naturvardestradKommentar"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "landskapKommentar"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markanvandning"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "kollektnoteringarDna"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "skador"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "Granbarkborre",
+                      "Stormskador",
+                      "Vildsvinsbök"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markskiktTackning"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "Låg",
+                      "Måttlig",
+                      "Hög"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markskiktTyp"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "Friskmosstyp",
+                      "Lavrik typ",
+                      "Lavtyp",
+                      "Sumpmosstyp"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markskiktArter"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "markskiktStruktur"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "faltskiktTackning"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "Låg",
+                      "Måttlig",
+                      "Hög"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "faltskiktTyp"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "Ädelörtstyp",
+                      "Högörtstyp",
+                      "Lågörtstyp",
+                      "Bredbladig grästyp",
+                      "Smalbladig grästyp",
+                      "Blåbärstyp",
+                      "Lingontyp",
+                      "Skvattramstyp"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "faltskiktArter"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "faltskiktStruktur"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "buskskiktTackning"
+                  },
+                  {
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "Låg",
+                      "Måttlig",
+                      "Hög"
+                    ],
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "buskskiktArter"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "buskskiktStruktur"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "ved_liggande"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "const": "ved_staende"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 100000
+                  }
+                ],
+                "items": false
+              }
+            ]
+          }
+        },
+        "images": {
+          "type": "object",
+          "properties": {
+            "mapImage": {
+              "type": "string",
+              "pattern": "^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$"
+            },
+            "image1": {
+              "type": "string",
+              "pattern": "^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$"
+            },
+            "image2": {
+              "type": "string",
+              "pattern": "^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$"
+            },
+            "image3": {
+              "type": "string",
+              "pattern": "^data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "compatibility": {
+    "previous_definition": "Protokolldefinition 2.0.0 använde andra fält-ID:n och ett separat nästlat svarsformat. Dessa filer ersätter det upplägget för nya implementationer; de är inte en automatisk migrering av sådana äldre fristående svar.",
+    "legacy_web_import": [
+      "strukturerDetalj förs till terrangKommentar med radbrytning om en terrängkommentar redan finns. Det äldre kryssvalet strukturer=Annat tas bort och bevaras som Annat: följt av dess kommentar (eller Annat om kommentar saknas).",
+      "Svamptillgång God/Viss/Dålig saknar exakt motsvarighet på skalan 0–4. Lägg Svamptillgång (tidigare skala): följt av värdet i begransningDetalj, bevara eventuell befintlig text och lämna svamptillgang tomt.",
+      "Äldre polygonCrs och centerCrs bevaras som Koordinatsystem: följt av värdet i polygonGeojson respektive centerCoordinate. Äldre dödvedsversioner kräver migrering enligt den gamla versionens specifikation; nuvarande webbplats normaliserar dem i normalizeFields och migrateWood. Denna definition anger det aktuella exporterade formatet, inte alla historiska indata."
+    ]
+  }
+}

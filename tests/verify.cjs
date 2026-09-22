@@ -2,9 +2,15 @@
 // This models form controls; it does not replace a visual browser check.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
+const projectRoot = path.resolve(__dirname, '..');
+const readProjectFile = (file, encoding) => fs.readFileSync(path.join(projectRoot, file), encoding);
 const vm = require('node:vm');
-const html = fs.readFileSync('index.html', 'utf8');
-const source = fs.readFileSync('app.js', 'utf8');
+const html = readProjectFile('index.html', 'utf8');
+for (const match of html.matchAll(/<(?:script|link|img)\b[^>]*\b(?:src|href)="([^"#]+)"/g)) {
+  assert(fs.existsSync(path.join(projectRoot, match[1])), `Referenced asset exists: ${match[1]}`);
+}
+const source = readProjectFile('scripts/app.js', 'utf8');
 const attrs = tag => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
 const decode = text => text.replace(/&(?:amp|lt|gt|quot|#39);/g, entity => ({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&#39;':"'"}[entity]));
 function setup(saved = {}, blocked = false) {
@@ -18,7 +24,7 @@ function setup(saved = {}, blocked = false) {
     addEventListener(){},
     querySelectorAll() { return controls; },
     reportValidity(){return true;},
-    reset(){controls.forEach(el => {el.value = el.type === 'checkbox' ? el.value : ''; el.checked = false;});}
+    reset(){controls.forEach(el => {el.value = ['checkbox', 'hidden'].includes(el.type) ? el.value : ''; el.checked = false;});}
   };
   const controls = [];
   const storage = new Map(Object.entries(saved));
@@ -33,11 +39,12 @@ function setup(saved = {}, blocked = false) {
   });
   // Populate the model from the actual rendered form before draft restoration.
   const cut = source.lastIndexOf('restoreDraft();');
-  vm.runInContext(fs.readFileSync('spatial-input.js', 'utf8'), context);
-  vm.runInContext(fs.readFileSync('deadwood.js', 'utf8'), context);
-  vm.runInContext(fs.readFileSync('report-export.js', 'utf8'), context);
+  vm.runInContext(readProjectFile('scripts/spatial-input.js', 'utf8'), context);
+  vm.runInContext(readProjectFile('scripts/deadwood.js', 'utf8'), context);
+  vm.runInContext(readProjectFile('scripts/form-ui.js', 'utf8'), context);
+  vm.runInContext(readProjectFile('scripts/report-export.js', 'utf8'), context);
   vm.runInContext(source.slice(0, cut), context);
-  vm.runInContext(fs.readFileSync('protocol-transfer.js', 'utf8'), context);
+  vm.runInContext(readProjectFile('scripts/protocol-transfer.js', 'utf8'), context);
   for (const match of form.innerHTML.matchAll(/<(input|textarea|select)\b([^>]*)>/g)) {
     const attributes = attrs(match[2]);
     if (attributes.name) {
@@ -50,6 +57,108 @@ function setup(saved = {}, blocked = false) {
   return {context, form, controls, storage, node, downloads, confirmation, run: code => vm.runInContext(code, context), field: name => controls.find(el => el.name === name)};
 }
 const app = setup();
+const standaloneProtocol = JSON.parse(readProjectFile('docs/protocol/protocol.json', 'utf8'));
+const protocolFields = new Map(standaloneProtocol.fields.map(field => [field.id, field]));
+assert.deepEqual([...new Set(app.controls.map(control => control.name))].sort(), standaloneProtocol.fields.filter(field => field.storage === 'fields').map(field => field.id).sort());
+assert.deepEqual(standaloneProtocol.fields.filter(field => field.storage === 'images').map(field => field.id).sort(), Object.keys(app.run('imageLabels')).sort());
+const referenced = new Set();
+const structureIds = new Set();
+function checkProtocolStructure(node) {
+  if (node.field_ref) {
+    assert(protocolFields.has(node.field_ref));
+    assert(!referenced.has(node.field_ref), `Field placed once: ${node.field_ref}`);
+    referenced.add(node.field_ref);
+  } else {
+    assert(!structureIds.has(node.id));
+    structureIds.add(node.id);
+    node.children.forEach(checkProtocolStructure);
+  }
+}
+standaloneProtocol.sections.forEach(checkProtocolStructure);
+assert.deepEqual([...referenced].sort(), [...protocolFields.keys()].sort());
+for (const field of standaloneProtocol.fields.filter(field => field.storage === 'fields')) {
+  const controls = app.controls.filter(control => control.name === field.id);
+  const control = controls[0];
+  assert.equal(field.required, false);
+  if (control.type === 'checkbox') {
+    assert.equal(field.type, 'multienum');
+    assert.deepEqual(controls.map(item => item.value).sort(), field.options.map(option => option.value).sort());
+  } else if (control.tagName === 'SELECT') {
+    assert.equal(field.type, 'enum');
+    assert.deepEqual(control.options.map(option => option.value).filter(Boolean).sort(), field.options.map(option => option.value).sort());
+  } else if (field.type === 'records') {
+    assert(standaloneProtocol.record_types[field.record_type]);
+    assert.equal(field.encoding, 'json-string-array');
+  } else {
+    assert.equal(field.type, control.type === 'date' ? 'date' : control.type === 'number' ? (field.id === 'areal' ? 'decimal' : 'integer') : 'text');
+    if (control.type === 'number') {
+      assert.equal(field.minimum, Number(control.min));
+      assert.equal(field.step, Number(control.step || 1));
+    }
+  }
+}
+const woodDefinition = standaloneProtocol.record_types.deadwood;
+assert.deepEqual(woodDefinition.fields.map(field => field.id).sort(), Object.keys(app.run('emptyWoodRow()')).sort());
+for (const field of woodDefinition.fields) {
+  if (field.options) {
+    const actual = field.id === 'tradslag' ? app.run('woodSpecies') : field.id === 'karaktar' ? app.run("[...new Set([...woodCharacters('Tall'), ...woodCharacters('Gran')])]") : app.run(`woodOptions[${JSON.stringify(field.id)}]`);
+    assert.deepEqual([...actual].sort(), field.options.map(option => option.value).sort());
+  }
+}
+assert.equal(standaloneProtocol.response_format.format, app.run('PROTOCOL_FORMAT'));
+assert.equal(standaloneProtocol.response_format.version, app.run('PROTOCOL_VERSION'));
+const protocolExample = JSON.parse(readProjectFile('docs/protocol/response.example.json', 'utf8'));
+const exampleApp = setup();
+exampleApp.context.protocolExample = protocolExample;
+exampleApp.run('applyProtocol(validateProtocol(protocolExample))');
+const exampleExport = JSON.parse(exampleApp.run('JSON.stringify(protocolData())'));
+for (const [name, value] of protocolExample.fields) {
+  assert(exampleExport.fields.some(([key, answer]) => key === name && answer === value), `Example field survives import/export: ${name}`);
+}
+assert.deepEqual(exampleExport.images, protocolExample.images);
+console.log('PASS: standalone definition matches every web field, image, wood field and choice; example imports directly and preserves answers on export.');
+const clearedWood = setup();
+const clearWoodRows = clearedWood.run("JSON.stringify([{...emptyWoodRow(), tradslag:'Gran', forekomst:'Rikligt', karaktar:['Barkborrepräglad']}, {...emptyWoodRow(), tradslag:'Tall', grovlek:'Grov >40 cm'}])");
+for (const name of ['ved_liggande', 'ved_staende']) {
+  clearedWood.field(name).value = clearWoodRows;
+  clearedWood.field(`${name}_kommentar`).value = 'Ska rensas';
+}
+clearedWood.confirmation.answer = false;
+clearedWood.node('#clearButton').click();
+assert.equal(clearedWood.field('ved_liggande').value, clearWoodRows, 'Cancelling reset preserves deadwood');
+clearedWood.confirmation.answer = true;
+clearedWood.node('#clearButton').click();
+for (const name of ['ved_liggande', 'ved_staende']) {
+  assert.equal(clearedWood.field(name).value, '', `${name} is cleared despite native hidden-input reset behavior`);
+  assert.equal(clearedWood.field(`${name}_kommentar`).value, '');
+}
+assert(!clearedWood.run('JSON.stringify(protocolData())').includes('Barkborrepräglad'));
+const reopenedClearedWood = setup(Object.fromEntries(clearedWood.storage));
+assert.equal(reopenedClearedWood.field('ved_liggande').value, '');
+assert.equal(reopenedClearedWood.field('ved_staende').value, '');
+assert.equal(app.run("statusPresentation('Sparar…').text"), '🟡 Sparar…');
+assert.equal(app.run("statusPresentation('Utkast sparat i denna webbläsare.').text"), '🟢 Sparat lokalt');
+assert.equal(app.run("statusPresentation('Sparat utkast återställt.').state"), 'saved');
+assert.equal(app.run("statusPresentation('Utkast sparas i denna webbläsare.').state"), 'ready');
+assert.equal(app.run("statusPresentation('Importen avbröts: Ogiltig fil').state"), 'error');
+assert.equal(app.run("statusPresentation('Sparat', 'Lagringen är full').text"), '🔴 Lagringen är full');
+assert.equal(app.run("statusPresentation('Skapar valda filer…').state"), 'busy');
+assert.equal(app.run("statusPresentation('Kontrollerar protokollfilen…').state"), 'busy');
+assert.equal((html.match(/id="status"/g) || []).length, 1);
+assert(html.indexOf('id="status"') < html.indexOf('</header>'));
+app.context.summaryControls = [
+  {name:'nvt0', type:'select', value:'0'},
+  {name:'tradslag', type:'checkbox', value:'Gran', checked:true},
+  {name:'tradslag', type:'checkbox', value:'Tall', checked:true},
+  {name:'tradslag', type:'checkbox', value:'Asp', checked:false},
+  {name:'kommentar', type:'textarea', value:'  '}
+];
+assert.equal(app.run('filledSummary(summaryControls)'), '2 ifyllda fält');
+assert.equal(app.run('filledSummary([], 1)'), '1 bild');
+assert.equal(app.run('filledSummary([])'), 'Inget ifyllt');
+assert.equal(app.run(`filledSummary([{name:'ved_liggande', value:JSON.stringify([emptyWoodRow(), {...emptyWoodRow(), forekomst:'Saknas'}, {...emptyWoodRow(), tradslag:'Gran'}])}])`), '2 registreringar');
+assert.equal(app.run('writingHints.metodDetalj'), 'Ange om annan metod använts');
+assert(!app.run('reportHtml(false)').includes(app.run('writingHints.naturvardestradKommentar')));
 for (const oldValue of ['God', 'Viss', 'Dålig']) {
   const legacy = setup({'faltrapport-draft': JSON.stringify([['svamptillgang', oldValue], ['begransningDetalj', 'Egen notering']])});
   assert.equal(legacy.field('svamptillgang').value, '');
@@ -91,7 +200,7 @@ assert.equal(headings[headings.indexOf('Trädskikt och skogstyp') + 1], 'Markveg
 const terrain = vegetationReport.sections.find(([title]) => title === 'Terräng & markförhållanden')[1];
 assert(terrain.some(([label, text]) => label.includes('Särskilda strukturer') && text.includes('Block')));
 assert(terrain.some(([, text]) => text === 'Mossiga block'));
-assert.equal((html.match(/class="info-button"/g) || []).length, 4);
+assert.equal((html.match(/class="info-button"/g) || []).length, 7);
 console.log('PASS: vegetation fields, damage choices, draft/JSON round trip, report values and section placement.');
 for (const id of ['saveJson', 'saveWord', 'saveHtml', 'saveCompact']) assert(new RegExp(`<input[^>]*id="${id}"[^>]*checked`).test(html), `${id} is selected by default`);
 const compactApp = setup();
@@ -236,7 +345,7 @@ async function verifyTransfer() {
   recipient.context.imported = JSON.parse(JSON.stringify(original));
   recipient.run('applyProtocol(validateProtocol(imported))');
   assert.equal(recipient.run('protocolSignature()'), app.run('protocolSignature()'), 'JSON round trip preserves all fields and images');
-  assert.equal(recipient.node('#topbarArea').textContent, app.field('namn').value);
+  assert.equal(recipient.field('namn').value, app.field('namn').value);
   assert.equal(recipient.run('hasUnsavedWork()'), false, 'Unchanged import does not warn');
   recipient.field('naturvardsarter').value = 'Ny observation';
   recipient.confirmation.answer = false;
@@ -379,10 +488,86 @@ function unzip(buffer) {
   return entries;
 }
 
+async function verifyAllCurrentFields() {
+  const complete = setup();
+  const names = new Set(complete.controls.map(control => control.name));
+  const expected = [];
+  for (const control of complete.controls) {
+    if (control.type === 'checkbox') {
+      control.checked = true;
+      expected.push(control.value);
+    } else if (control.tagName === 'SELECT') {
+      control.value = control.options.find(option => option.value !== '').value;
+      expected.push(control.value);
+    } else if (['ved_liggande', 'ved_staende'].includes(control.name)) {
+      control.value = complete.run(`JSON.stringify([
+        {...emptyWoodRow(), tradslag:'Gran', forekomst:'Rikligt', grovlek:'Grov >40 cm', nedbrytning:'Starkt nedbruten', karaktar:['Barkborrepräglad'], annat:'Vednotering_${control.name}', klimat:'Beskuggad'},
+        {...emptyWoodRow(), tradslag:'Annat', annatTradslag:'Hassel', forekomst:'Saknas'}
+      ])`);
+      expected.push(`Vednotering_${control.name}`, 'Hassel', 'Barkborrepräglad');
+    } else {
+      control.value = control.type === 'number' ? (control.name === 'areal' ? '12.5' : '120') :
+        control.type === 'date' ? '2026-09-22' : `Kontroll_${control.name}_åäö <&>\nAndra raden`;
+      expected.push(control.value);
+    }
+  }
+  for (const control of complete.controls.filter(control => control.tagName === 'SELECT')) {
+    const selected = control.value;
+    for (const option of control.options) {
+      control.value = option.value;
+      complete.run('validateProtocol(protocolData())');
+    }
+    control.value = selected;
+  }
+  complete.run('saveDraft()');
+  const restored = setup(Object.fromEntries(complete.storage));
+  assert.equal(restored.run('protocolSignature()'), complete.run('protocolSignature()'), 'All fields survive draft restoration');
+  await complete.run('saveAll({json:true, word:false, html:true, compact:true})');
+  const jsonFile = complete.node('#savedFileLinks').children.find(link => link.download.endsWith('.json'));
+  const jsonText = await complete.downloads.get(jsonFile.href).text();
+  const htmlFile = complete.node('#savedFileLinks').children.find(link => link.download.endsWith('.html'));
+  const compactHtml = await complete.downloads.get(htmlFile.href).text();
+  const copy = setup();
+  copy.context.importFile = {size:Buffer.byteLength(jsonText), text:async () => jsonText};
+  copy.context.importedAllFields = await copy.run('readProtocolFile(importFile)');
+  copy.run('applyProtocol(importedAllFields)');
+  assert.equal(copy.run('protocolSignature()'), complete.run('protocolSignature()'), 'Every current field survives actual exported JSON import');
+  const runtime = vm.createContext({Blob, Buffer, atob, btoa, setTimeout, clearTimeout, setImmediate, clearImmediate, console});
+  vm.runInContext(readProjectFile('vendor/docx-9.5.1.js', 'utf8'), runtime);
+  vm.runInContext(readProjectFile('scripts/report-export.js', 'utf8'), runtime);
+  for (const compact of [false, true]) {
+    const exportedHtml = compact ? compactHtml : copy.run('reportHtml(false, protocolData(), false)');
+    runtime.report = copy.run(`reportContent(protocolData(), ${compact})`);
+    const blob = await vm.runInContext('docx.Packer.toBlob(buildWordDocument(report, []))', runtime);
+    const xml = unzip(Buffer.from(await blob.arrayBuffer())).get('word/document.xml').toString();
+    for (const value of expected) {
+      for (const line of value.split('\n')) {
+        const escaped = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        assert(exportedHtml.includes(escaped), `HTML includes ${line}`);
+        assert(xml.includes(escaped), `Word includes ${line}`);
+      }
+    }
+  }
+  copy.context.legacyComments = {format:'faltrapport',version:1,images:{},fields:[
+    ['terrangKommentar','Befintlig terrängnotering'], ['strukturerDetalj','Äldre strukturnotering'],
+    ['svamptillgang','God'], ['begransningDetalj','Befintlig begränsning']
+  ]};
+  copy.run('applyProtocol(validateProtocol(legacyComments))');
+  assert.equal(copy.field('terrangKommentar').value, 'Befintlig terrängnotering\nÄldre strukturnotering');
+  assert.equal(copy.field('begransningDetalj').value, 'Befintlig begränsning\nSvamptillgång (tidigare skala): God');
+  const migratedSignature = copy.run('protocolSignature()');
+  copy.run('applyProtocol(validateProtocol(protocolData()))');
+  assert.equal(copy.run('protocolSignature()'), migratedSignature, 'Repeated import does not duplicate migrated comments');
+  for (const name of ['ved_liggande', 'ved_staende', 'kollektnoteringarDna', 'naturvardestradKommentar', 'landskapKommentar']) {
+    assert.equal(copy.field(name).value, '', `Import without ${name} removes previous data`);
+  }
+  console.log(`PASS: all ${names.size} current fields, every select option, draft and exported JSON round trip, compact/full HTML and real Word, combined legacy migration and clearing absent fields.`);
+}
+
 async function verifyWord() {
   const runtime = vm.createContext({Blob, Buffer, atob, btoa, setTimeout, clearTimeout, setImmediate, clearImmediate, console});
-  vm.runInContext(fs.readFileSync('vendor/docx-9.5.1.js', 'utf8'), runtime);
-  vm.runInContext(fs.readFileSync('report-export.js', 'utf8'), runtime);
+  vm.runInContext(readProjectFile('vendor/docx-9.5.1.js', 'utf8'), runtime);
+  vm.runInContext(readProjectFile('scripts/report-export.js', 'utf8'), runtime);
   runtime.report = app.run('reportContent(protocolData())');
   runtime.prepared = [{label:'Kartbild', data:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l9sAAAAASUVORK5CYII=', width:500, height:300}];
   for (const withImages of [false, true]) {
@@ -406,8 +591,8 @@ async function verifyWord() {
     assert(!rels.includes('TargetMode="External"'), 'No external image dependencies');
     // Optional QA fixtures, never generated during ordinary regression runs.
     if (process.env.WRITE_DOCX_FIXTURES === '1') {
-      fs.mkdirSync('.qa', {recursive:true});
-      fs.writeFileSync(`.qa/word-${withImages ? 'with' : 'without'}-images.docx`, buffer);
+      fs.mkdirSync(path.join(__dirname, 'artifacts'), {recursive:true});
+      fs.writeFileSync(path.join(__dirname, `artifacts/word-${withImages ? 'with' : 'without'}-images.docx`), buffer);
     }
   }
   console.log('PASS: real DOCX generation, ZIP parts, text, line breaks, A4/table geometry, styles and embedded images.');
@@ -420,4 +605,4 @@ async function verifyWord() {
   console.log('PASS: save dialog, format combinations, complete JSON, compact/full HTML and compact Word.');
 }
 
-(async () => {await verifyTransfer(); await verifyWord();})().catch(error => {console.error(error); process.exitCode = 1;});
+(async () => {await verifyTransfer(); await verifyWord(); await verifyAllCurrentFields();})().catch(error => {console.error(error); process.exitCode = 1;});

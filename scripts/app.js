@@ -2,7 +2,11 @@ const form = document.querySelector('#reportForm');
 const status = document.querySelector('#status');
 let storageWarning = '';
 function setStatus(message) {
-  status.textContent = [message, storageWarning].filter(Boolean).join(' ');
+  const detail = [message, storageWarning].filter(Boolean).join(' ');
+  const presentation = statusPresentation(message, storageWarning);
+  status.textContent = presentation.text;
+  status.title = detail;
+  status.className = `storage-status status-${presentation.state}`;
 }
 function normalizeFields(entries) {
   // Preserve the former "Annat" choice in the renamed comment field.
@@ -75,14 +79,11 @@ document.querySelectorAll('.image-input').forEach(input => {
 });
 
 function updateProgress() {
+  updateSectionSummaries();
   const mushroomAvailability = new FormData(form).get('svamptillgang') || '';
   document.querySelectorAll('[data-mushroom-value]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.mushroomValue === mushroomAvailability));
   });
-  const areaName = new FormData(form).get('namn')?.trim() || '';
-  const areaLabel = document.querySelector('#topbarArea');
-  areaLabel.textContent = areaName;
-  areaLabel.title = areaName;
   const groups = new Map();
   for (const el of form.querySelectorAll('input[name], textarea[name], select[name]')) {
     const filled = el.type === 'checkbox' ? el.checked : Boolean(el.value.trim());
@@ -93,6 +94,7 @@ function updateProgress() {
   document.querySelector('#progressBar').style.width = `${percent}%`;
 }
 function saveDraft() {
+  setStatus('Sparar…');
   updatePolygonStatus();
   updateProgress();
   try {
@@ -149,12 +151,15 @@ document.querySelector('#clearButton').addEventListener('click', () => {
   if (!confirm('Rensa alla uppgifter och bilder i utkastet? Nedladdade rapportfiler påverkas inte.')) return;
   imageGeneration++;
   form.reset();
+  // Hidden inputs retain their current value on native form reset.
+  for (const control of form.querySelectorAll('[name]')) {
+    if (['ved_liggande', 'ved_staende'].includes(control.name)) control.value = '';
+  }
   restoreWood();
   images = {};
   lastSavedSignature = null;
   showImages();
   saveDraft();
-  setStatus('Formuläret är rensat.');
 });
 document.querySelectorAll('[data-remove]').forEach(button => button.addEventListener('click', () => {
   imageVersions[button.dataset.remove] = (imageVersions[button.dataset.remove] || 0) + 1;
@@ -211,4 +216,6 @@ document.querySelectorAll('.image-input').forEach(input => input.addEventListene
 }));
 setupWood();
 setupPolygonImport();
+setupFormUI();
+setupTopbar();
 restoreDraft();

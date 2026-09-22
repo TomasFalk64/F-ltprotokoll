@@ -1,29 +1,66 @@
 # Fältprotokoll
 
-Öppna `index.html` i en webbläsare. Behåll `app.js`, `deadwood.js`, `report-export.js`, `protocol-transfer.js`, `spatial-input.js`, `styles.css` och mappen `vendor` tillsammans med sidan. Formuläret utgår från `Faltrapport_1.txt` och fungerar utan nätanslutning.
+## Syfte och funktion
 
-- Alla fält är valfria. Tom förekomst betyder ej bedömt; 0 betyder konstaterad frånvaro. Procenttalet visar besvarade fält, inte rapportens kvalitet eller fullständighet.
-- Kryssval tillåter flera svar, exempelvis när olika delar av området har olika egenskaper. Ange kompletteringar i fritextfälten.
-- De runda i-knapparna öppnar information om formuläret och vegetationsskikten. Stäng med Stäng, Escape eller ett klick utanför rutan.
-- Markvegetation ligger direkt efter Trädskikt och skogstyp. Markskikt, fältskikt och buskskikt har täckningsgrad, dominerande arter och struktur/funktion; mark- och fältskikt har även typval. Befintliga vegetationstyper finns kvar. Särskilda strukturer och småmiljöer ligger under Terräng & markförhållanden.
-- Begränsningar innehåller Svamptillgång (0 saknas, 1 enstaka, 2 sparsamt, 3 måttligt, 4 rikligt). Inget val betyder ej bedömt. Äldre värden (God/Viss/Dålig) bevaras i kommentaren för begränsningar vid import eller återställning. Processer innehåller pågående markanvändning, gärdsgårdar under mänsklig påverkan samt skador (granbarkborre, stormskador och vildsvinsbök). Alla nya uppgifter sparas i utkast, JSON och rapporterna.
-- Död ved delas i liggande och stående död ved med en kommentar per del. Lägg till trädslagsrader med förekomst, grovlek, nedbrytning, vedkaraktär (flerval) och mikroklimat. Tall och gran har särskilda vedkaraktärer. Vid byte av trädslag rensas val som inte gäller det nya trädslaget. På mobil visas raderna som kort. Kommentarerna har platshållaren ”Beskriv med egna ord”. Automatiska sammanställningar från äldre formulär tas bort vid import och återställning; egna kommentarer behålls.
-- Utkast och bilder sparas lokalt och återställs i samma webbläsare på samma adress. Webbläsarens inställningar, privat läge och lagringsutrymme kan begränsa sparandet; meddelandet ovanför formuläret visar om det misslyckas. Nedladdade rapportfiler är en separat kopia.
-- Kartbilden läggs till i Överblick efter sammanfattningen. GeoTIFF/TIFF, PNG och JPG stöds. För TIFF används alltid första bilden, även om filen har flera sidor. Kartan sparas som PNG med högst 1600 pixlar på längsta sidan och bibehållna proportioner. GeoPDF stöds inte.
-- GeoTIFF-importen hanterar färdiga kartbilder i RGB, gråskala och palettfärg. Filen får vara högst 100 MB och första bilden högst 40 miljoner pixlar/160 MB okomprimerade pixeldata. Mät-/höjddata och ovanliga orienteringar avvisas med ett meddelande. Georefereringen bäddas inte in i PNG-bilden; behåll originalfilen om den behövs.
-- Övriga foton ligger kvar under Bilder och stöder JPEG, PNG och WebP. De sparas som JPEG med högst 1600 pixlar på längsta sidan. Behåll originalbilder separat om full upplösning behövs.
-- **Spara** i topbaren öppnar dialogrutan **Spara inventering**. JSON, Word och HTML är förvalda. Välj de format du vill spara och tryck Spara, eller Avbryt för att återgå. Minst ett format måste vara valt. Filerna skapas från samma ögonblicksbild, inklusive bilder. Webbläsaren kan be dig tillåta flera nedladdningar. Separata länkar till senast skapade filer visas också ovanför formuläret och finns kvar tills du sparar igen eller lämnar sidan.
-- **Kompakt** är förvalt för Word och HTML och döljer tomma fält (`null`, tom text eller lista, ”Ej angivet”) samt tomma avsnitt. ”Ej bedömt”, 0 och ”Saknas” visas. **Fullständig** visar även obesvarade fält. JSON innehåller alltid kompletta data oavsett rapportläge. Innehållsvalet gråas ut när varken Word eller HTML är valt.
-- **Importera** öppnar JSON-filen och ersätter formulärets uppgifter och bilder. Om du har ändringar som inte exporterats visas en varning: OK fortsätter till filvalet, Avbryt låter dig gå tillbaka och spara. Även ett återställt lokalt utkast skyddas av varningen. Om du ändrar formuläret medan filen läses visas varningen igen före ersättningen.
-- Filformat, version, fält och bilder kontrolleras innan importen genomförs. Felaktiga filer lämnar formuläret oförändrat. Högsta filstorlek är 30 MB. Importen sker lokalt i webbläsaren.
-- Skicka JSON-filen till en kollega som ska komplettera protokollet. Word- och HTML-filer är rapportkopior; ändringar i dem läses inte tillbaka till formuläret.
-- All export görs via **Spara** i topbaren. Status för lokalt sparande, import och export visas på samma rad ovanför Överblick.
-- Word-exporten använder A4, rapportens gröna/guldgula färger, rubriker, tabeller och inbäddade bilder med bibehållna proportioner. Sidbrytningar kan variera mellan ordbehandlare. HTML-filen kan öppnas, delas och skrivas ut utan projektfilerna.
+Fältprotokoll är en webbplats för att snabbt och enkelt dokumentera ett områdes naturvärden i fält eller strax efter ett fältbesök. Formulärets avsnitt, valalternativ och korta skrivstöd hjälper inventeraren att komma ihåg vad som bör noteras och få med relevanta detaljer.
 
-JSON-formatet har `format: "faltrapport"`, `version: 1`, `fields` som en lista med namn/värde-par och `images` som inbäddade data-URL:er. Exporten innehåller även `savedAt`. Okända versioner eller fält avvisas för att undvika att information tappas bort.
+Här kan du beskriva bland annat trädskikt, markvegetation, naturvärdesträd, terräng, död ved, påverkan, artfynd och landskapssamband. Du kan även lägga till kartbilder, foton, koordinater samt kollekt- och DNA-noteringar. Avsnitten är hopfällbara och alla fält är valfria.
 
-Polygon och mittpunkt behandlas som text utan geografisk validering eller koordinatomvandling. Polygonfilimporten kontrollerar endast att filen är giltig JSON/GeoJSON (högst 1 MB och 100 000 tecken); innehållet behålls, inklusive formatering och eventuell CRS-information. Manuell inklistring tillåter även annan text. Efter lyckad polygon- eller protokollimport visas ”Polygon importerad” bredvid rutorna. Meddelandet försvinner om polygontexten ändras eller rensas. Koordinatsystem från äldre protokolls separata fält bevaras som frivillig text i polygon-/mittpunktsfältet.
+Uppgifterna sparas automatiskt lokalt i webbläsaren. Protokollet kan exporteras som en kompakt eller fullständig rapport i Word eller HTML, och som en maskinläsbar JSON-fil för fortsatt bearbetning, exempelvis med datorverktyg eller AI. JSON-filen kan importeras igen för att fortsätta arbetet eller låta en kollega komplettera uppgifterna. Webbplatsen fungerar utan internetanslutning och skickar inte protokolluppgifterna till någon server.
 
-Kart- och geometrikontroller: `node --check spatial-input.js` och `node verify-spatial.cjs`. Testerna avkodar riktiga GeoTIFF-fixturer med flera sidor, Deflate och 16-bitars RGB, och kontrollerar omskalning. Canvas/bildvisning modelleras i testet; den visuella PNG-förhandsvisningen behöver också granskas i webbläsaren.
+## Kom igång
 
-Kontroller: `node --check app.js`, `node --check report-export.js`, `node --check protocol-transfer.js` och `node verify.cjs`. Inga installationer behövs. Regressionstestet kontrollerar formulärmodellen, JSON-återimport, varningar, felhantering, samtidiga ändringar och tre filnedladdningar. Det kör även det lokala Word-biblioteket och kontrollerar den genererade DOCX-filens text, tabellmått, formatering och inbäddade bilder. Visuell layout, faktiska nedladdningar och bildavkodning behöver också kontrolleras i en webbläsare/ordbehandlare.
+Öppna `index.html` i webbläsaren. Ingen installation eller internetanslutning behövs. Utkast sparas lokalt; protokoll kan exporteras som JSON, Word och HTML.
+
+För att publicera eller kopiera webbplatsen behövs **`index.html`, `scripts/`, `assets/css/`, `assets/icons/` och `vendor/`**. Behåll mappstrukturen.
+
+| Sökväg | Innehåll |
+| --- | --- |
+| `index.html` | Webbplatsens startsida och formulär |
+| `scripts/` | Formulärlogik, lokal lagring, import och export |
+| `assets/css/` | Stilmall |
+| `assets/icons/` | Webbplatsikoner i 32, 64 och 180 px |
+| `assets/source/` | Ikonoriginal för framtida bearbetning; behövs inte vid publicering |
+| `vendor/` | Lokala bibliotek för Word och GeoTIFF, inklusive licenser |
+| `tests/` | Automatiska kontroller; behövs inte vid publicering |
+| `docs/` | Användarguide och separat protokollspecifikation |
+
+[Användarguide](docs/usage.md) · [Protokolldefinition](docs/protocol/protocol.json)
+
+Projektet är licensierat under [MIT](license.md). Tredjepartsbibliotekens egna licenser finns i `vendor/`.
+
+## Fristående protokoll för andra implementationer
+
+`docs/protocol/` innehåller tre filer för den som vill bygga ett eget formulär, exempelvis i en mobilapp med annan utformning. Webbplatsen läser inte dessa filer vid körning.
+
+- [`protocol.json`](docs/protocol/protocol.json) är den fristående filen att dela. Den beskriver de 11 sektionerna, webbplatsens 66 formulärfält och fyra bildplatser, dödvedsposternas åtta underfält samt datatyper, svarsalternativ, obligatoriskhet och villkor. Den beskriver också exakt hur inventeringar sparas och innehåller svarsschemat i `response_format.schema` samt regler för dödvedsposter i `record_types.deadwood.schema`.
+- [`protocol.schema.json`](docs/protocol/protocol.schema.json) är ett extra kontrollverktyg som validerar själva protokolldefinitionen. Det behövs inte för att visa formuläret.
+- [`response.example.json`](docs/protocol/response.example.json) är en fiktiv ifylld inventering i samma JSON-format som webbplatsen. Den kan importeras direkt via **Arkiv → Importera JSON**.
+
+Protokolldefinitionen använder nu webbplatsens exakta fältnamn och svarsvärden. En annan implementation kan läsa och skriva samma inventeringsformat utan en separat mappningsfil. Visningstexten (`label`) får översättas, men fältnamnet (`id`) och alternativets lagrade värde (`value`) måste bevaras. Exempelvis kan ”Grandominerad” visas på engelska men ska fortfarande sparas som `"Grandominerad"`.
+
+Svarsfiler har `format: "faltrapport"`, `version: 1`, namn/värde-par i `fields` och bilddata i `images`. Även numeriska fält lagras som strängar. Dödvedsposter lagras som JSON-kodade listor i två strängfält. Följ både de inbäddade schemana och kompletterande regler i `response_format.rules`; enbart schemakontroll räcker exempelvis inte för att kontrollera numeriska steg eller avkoda bilder. De automatiska testerna jämför definitionen med webbplatsens fält och alternativ samt provar exempelfilens import och återexport.
+
+Den nya definitionen har protokollversion **3.0.0** och definitionsformat **2.0.0**. Den ersätter det tidigare upplägget med andra fält-ID:n och ett separat nästlat svarsformat. Webbplatsens exportformat är oförändrat. Det saknar fortfarande protokoll-ID och innehållsversion i själva inventeringsfilen, så för exakt historisk spårbarhet behöver protokolldefinitionen sparas tillsammans med inventeringen. Att bädda in den referensen i webbexporten är en separat ändring som ännu inte är genomförd.
+
+## Kontroller
+
+Kör kontrollerna med Node.js, utan att installera paket:
+
+```sh
+node tests/verify.cjs
+node tests/verify-spatial.cjs
+```
+
+Testerna kontrollerar bland annat alla 66 formulärfält, JSON-export och återimport, HTML/Word, äldre protokoll, rensning och bildkonvertering. Skripten fungerar även om de startas från en annan arbetsmapp. Faktisk webbläsarinteraktion och visuell layout behöver kontrolleras separat.
+
+För att även validera de fristående JSON-schemana och exempelsvarets innehåll:
+
+```sh
+python -m pip install --target tests/artifacts/schema-deps "jsonschema[format-nongpl]"
+python tests/verify-protocol.py
+```
+
+Detta är en separat utvecklingskontroll. Python och validatorn behövs inte för webbplatsen.
+
+`WRITE_DOCX_FIXTURES=1` aktiverar valfria Word-testfiler i `tests/artifacts/`, som inte versionshanteras.

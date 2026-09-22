@@ -1,5 +1,8 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
+const projectRoot = path.resolve(__dirname, '..');
+const readProjectFile = (file, encoding) => fs.readFileSync(path.join(projectRoot, file), encoding);
 const vm = require('node:vm');
 const zlib = require('node:zlib');
 
@@ -46,8 +49,8 @@ async function main() {
     Image:class {naturalWidth=3200; naturalHeight=1600; async decode(){}},
   });
   runtime.self = runtime;
-  vm.runInContext(fs.readFileSync('vendor/geotiff-2.1.3.js','utf8'),runtime);
-  vm.runInContext(fs.readFileSync('spatial-input.js','utf8'),runtime);
+  vm.runInContext(readProjectFile('vendor/geotiff-2.1.3.js','utf8'),runtime);
+  vm.runInContext(readProjectFile('scripts/spatial-input.js','utf8'),runtime);
   for (const compressed of [false,true]) {
     runtime.buffer = tiffFixture([{color:[255,0,0],compressed},{color:[0,0,255]}]);
     const raster = await vm.runInContext('decodeGeoTiff(buffer)',runtime);
